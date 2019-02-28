@@ -1,0 +1,64 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://planets/Planet.gd" type="Script" id=1]
+[ext_resource path="res://planets/TetherToStar.gd" type="Script" id=2]
+[ext_resource path="res://planets/mercury.png" type="Texture" id=3]
+[ext_resource path="res://styles/scifi_theme.tres" type="Theme" id=4]
+[ext_resource path="res://styles/fonts/Righteous48.tres" type="DynamicFont" id=5]
+[ext_resource path="res://effects/welcome.wav" type="AudioStream" id=6]
+[ext_resource path="res://effects/thankYou.wav" type="AudioStream" id=7]
+
+[node name="Planet" type="RigidBody2D" groups=[
+"planets",
+]]
+position = Vector2( 1.82977, -4.36121 )
+collision_layer = 2
+collision_mask = 3
+mode = 2
+mass = 0.5
+can_sleep = false
+linear_velocity = Vector2( 500, 500 )
+script = ExtResource( 1 )
+
+[node name="TetherToStar" type="DampedSpringJoint2D" parent="."]
+node_a = NodePath("..")
+bias = 0.01
+length = 150.0
+rest_length = 75.0
+damping = 1.71
+script = ExtResource( 2 )
+Length = 75.0
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 2, 2 )
+texture = ExtResource( 3 )
+
+[node name="PlanetName" type="Label" parent="."]
+margin_left = -33.3947
+margin_top = 184.078
+margin_right = 23.6053
+margin_bottom = 198.078
+grow_horizontal = 2
+rect_pivot_offset = Vector2( 30.7859, 4.36703 )
+theme = ExtResource( 4 )
+custom_fonts/font = ExtResource( 5 )
+text = "MyName"
+align = 1
+
+[node name="ProductionTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+autostart = true
+
+[node name="VisitLockoutTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="WelcomeTraveller" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 6 )
+volume_db = -9.44
+
+[node name="ThankYouTraveller" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 7 )
+
+[connection signal="timeout" from="ProductionTimer" to="." method="_on_ProductionTimer_timeout"]

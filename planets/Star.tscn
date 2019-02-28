@@ -1,0 +1,59 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://planets/Star.gd" type="Script" id=1]
+[ext_resource path="res://planets/TetherToGalaxy.gd" type="Script" id=2]
+[ext_resource path="res://planets/sun.png" type="Texture" id=3]
+[ext_resource path="res://styles/scifi_theme.tres" type="Theme" id=4]
+[ext_resource path="res://styles/fonts/Righteous48.tres" type="DynamicFont" id=5]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 4967.87
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 248.916
+
+[node name="Star" type="StaticBody2D"]
+position = Vector2( -6.04352, 1.78064 )
+collision_layer = 8
+collision_mask = 2
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="TetherToGalaxy" type="PinJoint2D" parent="."]
+node_b = NodePath("..")
+script = ExtResource( 2 )
+
+[node name="SunSprite" type="Sprite" parent="."]
+texture = ExtResource( 3 )
+
+[node name="GravityWell" type="Area2D" parent="SunSprite"]
+visible = false
+gravity_point = true
+gravity_distance_scale = 1.0
+gravity_vec = Vector2( 0, 0 )
+gravity = 400.0
+linear_damp = 0.0
+angular_damp = 0.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SunSprite/GravityWell"]
+shape = SubResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 2 )
+
+[node name="Planets" type="Node2D" parent="."]
+
+[node name="StarName" type="Label" parent="."]
+margin_left = -91.0173
+margin_top = 322.701
+margin_right = 97.9827
+margin_bottom = 383.701
+grow_horizontal = 2
+rect_pivot_offset = Vector2( 96.5434, 18.7493 )
+theme = ExtResource( 4 )
+custom_fonts/font = ExtResource( 5 )
+text = "MyName"
+align = 1
+

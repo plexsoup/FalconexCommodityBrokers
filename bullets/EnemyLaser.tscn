@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://bullets/EnemyLaser.gd" type="Script" id=1]
+[ext_resource path="res://bullets/laser2.png" type="Texture" id=2]
+[ext_resource path="res://effects/laser.wav" type="AudioStream" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 69.0003, 15.4824 )
+
+[node name="Laser" type="Area2D"]
+position = Vector2( 7, 0.61343 )
+collision_layer = 32
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 60.4632, -0.7417 )
+texture = ExtResource( 2 )
+
+[node name="Duration" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 44, 0 )
+shape = SubResource( 1 )
+
+[node name="LaserNoise" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 3 )
+volume_db = -19.48
+
+[connection signal="body_entered" from="." to="." method="_on_Laser_body_entered"]
+[connection signal="timeout" from="Duration" to="." method="_on_Duration_timeout"]

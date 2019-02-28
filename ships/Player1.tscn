@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://ships/ship.gd" type="Script" id=1]
+[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://ships/Engine.tscn" type="PackedScene" id=3]
+
+
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 29.8351, 31.1695 )
+
+[node name="Player1" type="RigidBody2D"]
+script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="Thrusters" type="Node2D" parent="."]
+
+[node name="PortEngine" parent="Thrusters" instance=ExtResource( 3 )]
+position = Vector2( -34.3963, -20.5268 )
+SubscribedKeys = [ "right" ]
+
+[node name="StarboardEngine2" parent="Thrusters" instance=ExtResource( 3 )]
+position = Vector2( 33.8415, -20.2494 )
+rotation = 3.14159
+SubscribedKeys = [ "left" ]
+
+[node name="RearEngine" parent="Thrusters" instance=ExtResource( 3 )]
+position = Vector2( -0.27739, 31.8998 )
+rotation = -1.5708
+MaxThrust = 600.0
+

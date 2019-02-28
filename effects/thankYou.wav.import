@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/thankYou.wav-8ae7049c2d78eec9ace6790f3a7bd739.sample"
+
+[deps]
+
+source_file="res://effects/thankYou.wav"
+dest_files=[ "res://.import/thankYou.wav-8ae7049c2d78eec9ace6790f3a7bd739.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

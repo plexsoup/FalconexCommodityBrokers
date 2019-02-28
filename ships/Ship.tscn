@@ -1,0 +1,122 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://ships/ship.gd" type="Script" id=1]
+[ext_resource path="res://Camera2D.gd" type="Script" id=2]
+[ext_resource path="res://ships/falcon1.png" type="Texture" id=3]
+[ext_resource path="res://ships/falcon-dualLasers.png" type="Texture" id=4]
+[ext_resource path="res://ships/Weapon.gd" type="Script" id=5]
+[ext_resource path="res://bullets/Bullet.tscn" type="PackedScene" id=6]
+[ext_resource path="res://effects/chunk-pneumatic.wav" type="AudioStream" id=7]
+[ext_resource path="res://ships/FalconDual Lasers.png" type="Texture" id=8]
+[ext_resource path="res://bullets/Laser.tscn" type="PackedScene" id=9]
+[ext_resource path="res://effects/laser.wav" type="AudioStream" id=10]
+[ext_resource path="res://ships/thrust.png" type="Texture" id=11]
+[ext_resource path="res://ships/fireSound.ogg" type="AudioStream" id=12]
+[ext_resource path="res://effects/crash.ogg" type="AudioStream" id=13]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 29.8351, 31.1695 )
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 283.598
+
+[node name="Ship" type="RigidBody2D"]
+collision_mask = 7
+contacts_reported = 5
+contact_monitor = true
+linear_damp = 0.1
+angular_damp = 5.0
+script = ExtResource( 1 )
+MaxThrust = 3500.0
+ThrustIncrement = 800.0
+SpinThrust = 30000.0
+MaxSpeed = 5500.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+zoom = Vector2( 3, 3 )
+smoothing_enabled = true
+smoothing_speed = 13.97
+drag_margin_left = 0.0
+drag_margin_top = 0.0
+drag_margin_right = 0.0
+drag_margin_bottom = 0.0
+script = ExtResource( 2 )
+
+[node name="Body" type="Sprite" parent="."]
+scale = Vector2( 0.15, 0.15 )
+texture = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="Weapons" type="Node2D" parent="."]
+
+[node name="MissileLaunchers" type="Sprite" parent="Weapons"]
+scale = Vector2( 0.15, 0.15 )
+texture = ExtResource( 4 )
+script = ExtResource( 5 )
+Bullet = ExtResource( 6 )
+
+[node name="Muzzles" type="Node2D" parent="Weapons/MissileLaunchers"]
+
+[node name="Port" type="Position2D" parent="Weapons/MissileLaunchers/Muzzles"]
+position = Vector2( 232.53, -232.94 )
+
+[node name="Starboard" type="Position2D" parent="Weapons/MissileLaunchers/Muzzles"]
+position = Vector2( 232.53, 232.94 )
+
+[node name="ReloadTimer" type="Timer" parent="Weapons/MissileLaunchers"]
+wait_time = 0.45
+one_shot = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Weapons/MissileLaunchers"]
+stream = ExtResource( 7 )
+volume_db = -38.0
+
+[node name="DualLasers" type="Sprite" parent="Weapons"]
+scale = Vector2( 0.15, 0.1 )
+texture = ExtResource( 8 )
+script = ExtResource( 5 )
+Bullet = ExtResource( 9 )
+Delay = 0.01
+
+[node name="Muzzles" type="Node2D" parent="Weapons/DualLasers"]
+
+[node name="Port" type="Position2D" parent="Weapons/DualLasers/Muzzles"]
+position = Vector2( 300, -175 )
+rotation = 0.0349066
+
+[node name="Starboard" type="Position2D" parent="Weapons/DualLasers/Muzzles"]
+position = Vector2( 300, 175 )
+rotation = -0.0349066
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Weapons/DualLasers"]
+stream = ExtResource( 10 )
+volume_db = -40.0
+
+[node name="ReloadTimer" type="Timer" parent="Weapons/DualLasers"]
+wait_time = 0.15
+one_shot = true
+
+[node name="thrust" type="Sprite" parent="."]
+position = Vector2( -92.0937, 0.554779 )
+texture = ExtResource( 11 )
+
+[node name="EngineNoise" type="AudioStreamPlayer" parent="thrust"]
+stream = ExtResource( 12 )
+volume_db = -29.62
+
+[node name="Magnet" type="Area2D" parent="."]
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Magnet"]
+shape = SubResource( 2 )
+
+[node name="PopupEffects" type="Node2D" parent="."]
+
+[node name="CrashNoise" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 13 )
+volume_db = -23.347
+
+[connection signal="timeout" from="Weapons/MissileLaunchers/ReloadTimer" to="Weapons/MissileLaunchers" method="_on_ReloadTimer_timeout"]
