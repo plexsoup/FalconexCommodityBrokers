@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/inventoryFull.wav-82d5a3b28f56e5c7e72be0fd91721833.sample"
+
+[deps]
+
+source_file="res://effects/inventoryFull.wav"
+dest_files=[ "res://.import/inventoryFull.wav-82d5a3b28f56e5c7e72be0fd91721833.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

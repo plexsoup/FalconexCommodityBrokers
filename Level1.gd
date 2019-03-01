@@ -3,11 +3,15 @@ extends Node2D
 # Declare member variables here. Examples:
 onready var global = get_node("/root/global")
 onready var ShipContainer = get_node("galaxy/Ships")
+export var MaxEnemies = 9
 
 enum STATES {
 	frozen, playing
 }
 var CurrentState = STATES.frozen
+
+signal started()
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -43,7 +47,7 @@ func _ready():
 	spawnDialogBox(textArr)
 
 func getState():
-	return CurrentState	
+	return CurrentState
 	
 func spawnPlayerShip():
 	var playerShipScene = load("res://ships/Ship.tscn")
@@ -95,30 +99,47 @@ func spawnEnemies(num):
 		newEnemy.start(pos)
 		pos += Vector2(randf()*300+100, randf()*300+100)
 
+func startGame():
+	CurrentState = STATES.playing
+	for object in get_tree().get_nodes_in_group("GUI"):
+		if object.has_method("_on_Level_started"):
+			connect("started", object, "_on_Level_started")
+	emit_signal("started")
+	for object in get_tree().get_nodes_in_group("GUI"):
+		if is_connected("started", object, "_on_Level_started"):
+			disconnect("started", object, "_on_Level_started")
+	
+
+func getNumEnemies():
+	return get_tree().get_nodes_in_group("enemies").size()
+
+
 func _on_Planet_commodity_requested(pos, type):
 	call_deferred("spawnCommodity", pos, type)
 
 func _on_Ship_commodity_lost(pos, type):
-	call_deferred("spawnCommodity", pos, type)
+	if randf()<0.1:
+		return # commodity lost
+	else:
+		call_deferred("spawnCommodity", pos, type)
 
 func _on_ship_cash_popup_requested(pos, amount):
-	print(self.name, " received signal _on_ship_cash_popup_requested ", pos, " " , amount)
+	#print(self.name, " received signal _on_ship_cash_popup_requested ", pos, " " , amount)
 	call_deferred("spawnCashPopup", pos, amount)
 
 func _on_DialogBox_completed():
 	spawnPlayerShip()
-	CurrentState = STATES.playing
+	startGame()
+
 
 func _on_EnemySpawnTimer_timeout():
 	if CurrentState == STATES.playing:
-		spawnEnemies(3)
+		if getNumEnemies() < MaxEnemies:
+			spawnEnemies(3)
 
 func _on_ship_filled_inventory():
-	var warningPanel = $CanvasLayer/PopupPanel
+	var warningPanel = $CanvasLayer/WarningPanel
 	var warningLabel = warningPanel.get_node("WarningLabel")
-	var screenSize = get_viewport().get_size()
-	var rect = Rect2(Vector2(screenSize.x/2, screenSize.y/2), Vector2(200, 25))
-	warningLabel.set_text("Inventory Full")
-	warningPanel.popup(rect)
+	warningPanel.flashMessage()
 	
 	

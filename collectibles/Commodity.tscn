@@ -7,7 +7,9 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 18.7681, 17.3495 )
 
-[node name="Commodity" type="Area2D"]
+[node name="Commodity" type="Area2D" groups=[
+"collectibles",
+]]
 collision_layer = 16
 script = ExtResource( 1 )
 

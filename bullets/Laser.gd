@@ -8,7 +8,7 @@ var BaseRot
 export var WaveFreq : float
 export var sinPattern : bool = false
 var Acceleration = 1700.0
-var Damage = 100
+export var Damage = 100
 
 var CurrentPos
 

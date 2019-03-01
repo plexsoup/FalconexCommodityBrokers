@@ -37,6 +37,7 @@ signal buy(shipObj)
 signal cash_popup_requested(pos, amount)
 signal picked_up_commodity()
 signal filled_inventory()
+signal lost_item(pos, commodityType)
 
 func _ready():
 	start() # why isn't Level calling Start?
@@ -141,10 +142,18 @@ func pickup_commodity(collectibleObj, commodityType):
 		connect("picked_up_commodity", collectibleObj, "_on_ship_picked_up_commodity")
 		emit_signal("picked_up_commodity")
 		disconnect("picked_up_commodity", collectibleObj, "_on_ship_picked_up_commodity")
+		if getInventoryItemCount() == MaxInventoryCount:
+			$InventoryFullNoise.play()
+			alertFullInventory()
 	else:
-		alertFullInventory()
-		
+		pass # ignore items after you've notified about full inventory
+	
+	
+	
+	
+	
 func alertFullInventory():
+	
 	# tell the all enemies and the main level
 	var currentLevel = global.getCurrentLevel()
 	connect("filled_inventory", currentLevel , "_on_ship_filled_inventory")
@@ -167,6 +176,12 @@ func getInventoryItemCount():
 	for commodityType in CommoditiesHeld:
 		total += CommoditiesHeld[commodityType]
 	return total
+
+func isCargoHoldFull():
+	if getInventoryItemCount() < MaxInventoryCount:
+		return false
+	else:
+		return true
 	
 func getCash():
 	return Cash
@@ -220,10 +235,9 @@ func _on_planet_purchase_accepted(commodityName, quantity, cashGiven):
 func _input(event):
 	if event.is_action_pressed("cash_popup"):
 		emit_signal("cash_popup_requested", get_global_position(), 1000)
-	
-func _on_hit(amount):
-	$CrashNoise.play()
-	# give up commodities first, then cash
+		Cash += 1000
+
+func loseItem():
 	var itemsInHold = []
 	for key in CommoditiesHeld:
 		if CommoditiesHeld[key] > 0:
@@ -237,3 +251,56 @@ func _on_hit(amount):
 	else:
 		if Cash > 100:
 			Cash -= 100
+	
+	
+func _on_hit(amount):
+	$CrashNoise.play()
+	# give up commodities first, then cash
+	loseItem()			
+			
+func _on_UpgradeButtons_upgrade_pressed(upgradeType, requestingObj):
+	match upgradeType:
+		"lasers":
+			var costOfUpgrade = 1000
+			if Cash >= costOfUpgrade:
+				$Weapons/DualLasers/ReloadTimer.set_wait_time(0.1)
+				$Weapons/DualLasers.Bullet = load("res://bullets/Laser2.tscn")
+				Cash -= costOfUpgrade
+			
+		"engines":
+			var costOfUpgrade = 1000
+			if Cash >= costOfUpgrade:
+				MaxThrust = 5500
+				ThrustIncrement = 1200
+				SpinThrust = 35000
+				MaxSpeed = 7500
+				Cash -= costOfUpgrade
+
+		"shields":
+			var costOfUpgrade = 1000
+			if Cash >= costOfUpgrade:
+				pass # **** Implement this
+				Cash -= costOfUpgrade
+			
+		"missiles":
+			var costOfUpgrade = 1000
+			if Cash >= costOfUpgrade:
+				$Weapons/MissileLaunchers/ReloadTimer.set_wait_time(0.3)
+				Cash -= costOfUpgrade
+
+		"magnet": #0 = 253, 1 = 512, 2 = 750, 3 = 1500
+			var costOfUpgrade = 1000
+			if Cash >= costOfUpgrade:
+				var shape = $Magnet/CollisionShape2D.get_shape()
+				shape.set_radius(750)
+				Cash -= costOfUpgrade
+
+		"targeting":
+			pass
+		
+		"storage":
+			var costOfUpgrade = 1000
+			if Cash >= costOfUpgrade:
+				MaxInventoryCount = 32
+				Cash -= costOfUpgrade
+

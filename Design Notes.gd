@@ -8,6 +8,8 @@ TODO:
 			- lasers, missiles, shield, cargo hold, engines
 
 Notes regarding Design Decisions:
+	- what if, instead of selecting the planet, one was selected at random?
+	
 	- removed purchase price from commodities. planets kick them out for free now
 		- spending money isn't fun, unless it's on ship upgrades
 	- it's very easy to bump into the wrong planet..
@@ -30,14 +32,30 @@ Features Required
 
 
 Bugs to Fix
+	- inventory warning isn't showing up	
+	
+	- lasers sometimes hang around
 	
 	
 	- opening and closing the sidebar selects a planet
 	- sometimes the wrong planet is selected
 	
+
 	
 	
 Game-Feel / User Experience Enhancements to Make
+	- magnet upgrade = invincible. can't lose items.
+		- make losing item have a chance of destroying it
+		
+	
+	- when mouse is over button, pressing space activates the button
+		
+	- inventory should be displayed at top of screen always
+	- need a voice message for purchasing upgrade.
+	
+	
+	- when you hit enemies, the second hit should not show a shield
+	
 	- when you sell, remove your compass target
 	- make cash popup spawn a bit closer
 	

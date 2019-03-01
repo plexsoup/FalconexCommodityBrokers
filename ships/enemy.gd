@@ -10,6 +10,8 @@ extends Area2D
 
 # Declare member variables here. Examples:
 var Ticks : int = 0
+var TimeElapsed : float = 0
+
 onready var global = get_node("/root/global")
 var CurrentPlayerShip
 var CurrentLevel
@@ -18,11 +20,18 @@ var Speed = 700
 var DodgeMagnitude = 500
 var MaxHealth : int = 300
 var Health : int = MaxHealth
+export var LikelihoodOfPursuingPlayer = 0.25
 
 var Dead : bool = false
 
 enum STATES { normal, shielded, exploding, dead }
 var CurrentState = STATES.normal
+
+enum GOALS { player, planet, commodities }
+var CurrentGoal = GOALS.planet
+
+
+var CurrentTarget
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -32,31 +41,32 @@ func start(pos):
 	set_global_position(pos)
 	CurrentPlayerShip = global.getPlayerShip()
 	CurrentLevel = global.getCurrentLevel()
-
-func getVectorTowardPlayer(delta):
+	getNewBehaviour()
+		
+func getVectorTowardTarget(delta):
 	var returnVector = Vector2(0,0)
 	var myPos = get_global_position()
-	var playerPos = CurrentPlayerShip.get_global_position()
+	var targetPos = CurrentTarget.get_global_position()
 	var avoidanceDistance = 800
-	if myPos.distance_squared_to(playerPos) > avoidanceDistance * avoidanceDistance:
-		returnVector += (playerPos - myPos).normalized() * Speed * delta * global.GameSpeed
+	if myPos.distance_squared_to(targetPos) > avoidanceDistance * avoidanceDistance:
+		returnVector += (targetPos - myPos).normalized() * Speed * delta * global.GameSpeed
 	else:
-		returnVector -= (playerPos - myPos).normalized() * Speed * delta * global.GameSpeed
+		returnVector -= (targetPos - myPos).normalized() * Speed * delta * global.GameSpeed
 	return returnVector
 	
 func getVectorSideToSideDodging(delta):
 	
 	return Vector2(1, 0).rotated(rotation-(PI/2)) * sin(Ticks/20) * DodgeMagnitude * delta
 
-func lookTowardPlayer(delta):
+func lookTowardTarget(delta):
 	# turn left or right depending on dot product?
 	
 	var myVector = Vector2(1,0).rotated(rotation)
-	var vecToPlayer = CurrentPlayerShip.get_global_position() - get_global_position()
+	var vecToTarget = CurrentTarget.get_global_position() - get_global_position()
 	
 	var mySideVec = myVector.rotated(PI/2)
 	var turnSpeed = 0.02
-	if mySideVec.dot(vecToPlayer) < 0 :
+	if mySideVec.dot(vecToTarget) < 0 :
 		rotation -= turnSpeed
 	else:
 		rotation += turnSpeed
@@ -75,16 +85,39 @@ func getVectorToAvoidAllies(delta):
 	return returnVector
 
 func goAfterShip():
-	pass
+	CurrentTarget = global.getPlayerShip()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
+
+func getNewBehaviour():
+	if global.getPlayerShip().getInventoryItemCount() > 8:
+		
+		if CurrentGoal == GOALS.player or randf() < LikelihoodOfPursuingPlayer:
+			CurrentTarget = global.getPlayerShip()
+			CurrentGoal = GOALS.player
+		else:
+			CurrentTarget = global.getGalaxy().getRandomPlanet()
+			CurrentGoal = GOALS.planet
+	else:
+		CurrentTarget = global.getGalaxy().getRandomPlanet()
+		CurrentGoal = GOALS.planet
+		
+func getGoal():
+	return CurrentGoal
+
 func _process(delta):
+
 	if Dead == false:
 		Ticks += 1
+		TimeElapsed += delta
+
+		if Ticks % 60*25 == 0: # roughly every 25 seconds or so
+			getNewBehaviour()
 		
-		lookTowardPlayer(delta)
+			
+		lookTowardTarget(delta)
 		
-		Velocity = getVectorTowardPlayer(delta)
+		Velocity = getVectorTowardTarget(delta)
 		Velocity += getVectorSideToSideDodging(delta)
 		Velocity += getVectorToAvoidAllies(delta)
 		set_global_position(get_global_position() + Velocity)

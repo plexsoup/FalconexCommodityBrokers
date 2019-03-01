@@ -63,6 +63,9 @@ func orbit(delta):
 func getPlanets():
 	return $Planets.get_children()
 
+func getRandomPlanet():
+	var planets = getPlanets()
+	return planets[randi()%planets.size()]
 
 func getLinearVelocity():
 	return Velocity

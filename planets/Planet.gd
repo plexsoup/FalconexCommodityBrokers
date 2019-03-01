@@ -200,7 +200,7 @@ func _on_ship_sell_requested(seller, commodityName, quantity):
 	if ClosedForBusiness == false:
 		var purchasePrice = PriceList[commodityName] * quantity
 		connect("purchase_accepted", seller, "_on_planet_purchase_accepted")
-		print(self.name, " accepting purchase ", " seller == ", seller, ", commodityName == ", commodityName, ", quantity == " ,quantity   )
+		#print(self.name, " accepting purchase ", " seller == ", seller, ", commodityName == ", commodityName, ", quantity == " ,quantity   )
 		emit_signal("purchase_accepted", commodityName, quantity, purchasePrice)
 		disconnect("purchase_accepted", seller, "_on_planet_purchase_accepted")
 		

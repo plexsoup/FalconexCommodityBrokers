@@ -28,7 +28,12 @@ func spawnStars(numStars):
 func getStars():
 	return StarSystems.get_children()
 
-	
+func getRandomPlanet():
+	var stars = getStars()
+	var randomStar = stars[randi()%stars.size()]
+	var randomPlanet = randomStar.getRandomPlanet()
+	return randomPlanet
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

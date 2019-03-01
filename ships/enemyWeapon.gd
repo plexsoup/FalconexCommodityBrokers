@@ -72,6 +72,7 @@ func _on_ShootCycleTimer_timeout():
 
 	# 5 off, 1 on
 	if Shooting == false and ShootCycleTimerTicks % 5 == 0:
-		toggleShooting()
+		if MyShip.getGoal() == MyShip.GOALS.player:
+			toggleShooting()
 	elif Shooting == true:
 		toggleShooting()

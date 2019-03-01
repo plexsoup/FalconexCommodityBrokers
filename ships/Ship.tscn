@@ -1,18 +1,20 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://ships/ship.gd" type="Script" id=1]
 [ext_resource path="res://Camera2D.gd" type="Script" id=2]
 [ext_resource path="res://ships/falcon1.png" type="Texture" id=3]
 [ext_resource path="res://ships/falcon-dualLasers.png" type="Texture" id=4]
 [ext_resource path="res://ships/Weapon.gd" type="Script" id=5]
-[ext_resource path="res://bullets/Bullet.tscn" type="PackedScene" id=6]
+[ext_resource path="res://bullets/Missile.tscn" type="PackedScene" id=6]
 [ext_resource path="res://effects/chunk-pneumatic.wav" type="AudioStream" id=7]
 [ext_resource path="res://ships/FalconDual Lasers.png" type="Texture" id=8]
 [ext_resource path="res://bullets/Laser.tscn" type="PackedScene" id=9]
 [ext_resource path="res://effects/laser.wav" type="AudioStream" id=10]
 [ext_resource path="res://ships/thrust.png" type="Texture" id=11]
 [ext_resource path="res://ships/fireSound.ogg" type="AudioStream" id=12]
-[ext_resource path="res://effects/crash.ogg" type="AudioStream" id=13]
+[ext_resource path="res://ships/Magnet.gd" type="Script" id=13]
+[ext_resource path="res://effects/crash.ogg" type="AudioStream" id=14]
+[ext_resource path="res://effects/inventoryFull.wav" type="AudioStream" id=15]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 29.8351, 31.1695 )
@@ -29,7 +31,7 @@ angular_damp = 5.0
 script = ExtResource( 1 )
 MaxThrust = 3500.0
 ThrustIncrement = 800.0
-SpinThrust = 30000.0
+SpinThrust = 25000.0
 MaxSpeed = 5500.0
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -67,7 +69,7 @@ position = Vector2( 232.53, -232.94 )
 position = Vector2( 232.53, 232.94 )
 
 [node name="ReloadTimer" type="Timer" parent="Weapons/MissileLaunchers"]
-wait_time = 0.45
+wait_time = 0.6
 one_shot = true
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Weapons/MissileLaunchers"]
@@ -96,7 +98,7 @@ stream = ExtResource( 10 )
 volume_db = -40.0
 
 [node name="ReloadTimer" type="Timer" parent="Weapons/DualLasers"]
-wait_time = 0.15
+wait_time = 0.3
 one_shot = true
 
 [node name="thrust" type="Sprite" parent="."]
@@ -109,6 +111,7 @@ volume_db = -29.62
 
 [node name="Magnet" type="Area2D" parent="."]
 collision_mask = 16
+script = ExtResource( 13 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Magnet"]
 shape = SubResource( 2 )
@@ -116,7 +119,11 @@ shape = SubResource( 2 )
 [node name="PopupEffects" type="Node2D" parent="."]
 
 [node name="CrashNoise" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource( 13 )
+stream = ExtResource( 14 )
 volume_db = -23.347
+
+[node name="InventoryFullNoise" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 15 )
+volume_db = -9.0
 
 [connection signal="timeout" from="Weapons/MissileLaunchers/ReloadTimer" to="Weapons/MissileLaunchers" method="_on_ReloadTimer_timeout"]

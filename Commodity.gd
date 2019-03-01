@@ -32,6 +32,12 @@ func start(commodityType : String, startPos, endPos):
 	yield(tween, "tween_completed")
 	CurrentState = STATES.ready
 	
+	# **** TODO: check for large magnet. ask the ship.
+		# fly toward ship immediately
+	var areas = get_overlapping_areas()
+	for area in areas:
+		if area.name == "Magnet":
+			FollowTarget = area.get_node("..")
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -44,8 +50,12 @@ func getPickedUp(pickerUpper):
 	# Note: this is calling a foreign method directly.
 			# better if it was a signal.
 	if pickerUpper.has_method("pickup_commodity"):
-		pickerUpper.pickup_commodity(self, MyType)
-
+		if pickerUpper.has_method("isCargoHoldFull"):
+			if pickerUpper.isCargoHoldFull():
+				FollowTarget = null
+				
+			else:
+				pickerUpper.pickup_commodity(self, MyType)
 
 func _on_ship_picked_up_commodity():
 		$Sprite.hide()
