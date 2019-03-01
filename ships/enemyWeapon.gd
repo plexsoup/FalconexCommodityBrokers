@@ -30,7 +30,8 @@ func fireAllGuns():
 
 func fireBullet(muzzle):
 	#print(self.name, " MyShip linear_velocity == ", MyShip.get_linear_velocity())
-	emit_signal("bullet_requested", muzzle.get_global_position(), muzzle.get_global_rotation(), MyShip.Velocity, Bullet)
+	var rot = muzzle.get_global_rotation() + randf()*0.035 - 0.0175
+	emit_signal("bullet_requested", muzzle.get_global_position(), rot, MyShip.Velocity, Bullet)
 	
 #	var newBullet = Bullet.instance()
 #	global.getCurrentLevel().get_node("Bullets").add_child(newBullet)
@@ -44,11 +45,23 @@ func fireBullet(muzzle):
 func _process(delta):
 	Ticks += 1
 
+func isShipCapableOfFiring():
+	var capability = true
+	if MyShip.CurrentState == MyShip.STATES.exploding:
+		capability = false
+	elif MyShip.CurrentState == MyShip.STATES.dead:
+		capability = false
+	elif MyShip.Dead == true:
+		capability = false
+	return capability
+
 func commenceFiring():
 	#$AudioStreamPlayer.play()
 	#yield(get_tree().create_timer(0.15), "timeout")
-	fireAllGuns()
-	$ReloadTimer.start()
+	# STATES: normal, shielded, exploding, dead
+	if isShipCapableOfFiring():
+		fireAllGuns()
+		$ReloadTimer.start()
 	
 func _on_ReloadTimer_timeout():
 	if Shooting == true:
@@ -59,12 +72,13 @@ func toggleShooting():
 		Shooting = false
 		
 	else:
-		Shooting = true
-		commenceFiring()
+		if isShipCapableOfFiring():
+			Shooting = true
+			commenceFiring()
 
 
 func _on_ShootCycleTimer_timeout():
-	if MyShip.Dead == true:
+	if isShipCapableOfFiring() == false:
 		Shooting = false
 		return # bail out. no more shooting if you're dead.
 		

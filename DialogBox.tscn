@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://styles/scifi_theme.tres" type="Theme" id=1]
 [ext_resource path="res://DialogBox.gd" type="Script" id=2]
 [ext_resource path="res://effects/Dialog.Typing.ogg" type="AudioStream" id=3]
+[ext_resource path="res://styles/fonts/Righteous26.tres" type="DynamicFont" id=4]
+[ext_resource path="res://styles/fonts/Righteous48.tres" type="DynamicFont" id=5]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -19,7 +21,7 @@ script = ExtResource( 2 )
 
 [node name="KeypressNoise" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )
-volume_db = -24.233
+volume_db = -36.0
 
 [node name="DialogTextLabel" type="Label" parent="."]
 margin_right = 40.0
@@ -35,9 +37,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -278.0
+margin_left = -351.5
 margin_top = -150.0
-margin_right = 425.0
+margin_right = 351.5
 margin_bottom = 150.0
 theme = SubResource( 2 )
 color = Color( 0.0784314, 0.0196078, 0.235294, 0.772549 )
@@ -47,14 +49,16 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -236.66
-margin_top = -115.67
-margin_right = 393.34
-margin_bottom = 114.33
+margin_left = -315.0
+margin_top = -115.0
+margin_right = 315.0
+margin_bottom = 115.0
 theme = ExtResource( 1 )
+custom_fonts/italics_font = ExtResource( 4 )
+custom_fonts/bold_font = ExtResource( 5 )
 bbcode_enabled = true
-bbcode_text = "test"
-text = "test"
+bbcode_text = "test [b]test[/b] [i]test[/i]"
+text = "test test test"
 
 [connection signal="timeout" from="DialogTextLabel/LetterTimer" to="." method="_on_LetterTimer_timeout"]
 [connection signal="gui_input" from="ColorRect" to="." method="_on_ColorRect_gui_input"]

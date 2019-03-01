@@ -140,7 +140,7 @@ func lightUpExplosion():
 	$Explosion/DestructionTimer.start()
 
 func dieSlowly():
-	#$CollisionShape2D.set_disabled(true)
+	$CollisionShape2D.call_deferred("set_disabled", true)
 	CurrentState = STATES.dead
 	$Sprite.hide()
 	$Shield.hide()

@@ -83,3 +83,16 @@ func _on_Commodity_body_entered(body):
 		if body == CurrentPlayer:
 			# get collected
 			getPickedUp(body)
+
+
+func _on_DurationTimer_timeout():
+	$DestructionTimer.start()
+
+
+func _on_WobbleTimer_timeout():
+	if CurrentState == STATES.ready:
+		$AnimationPlayer.play("wobble")
+		#yield(tween, "tween_completed")
+		$WobbleTimer.set_wait_time(1.0 + randf()*2.0)
+		$WobbleTimer.start()
+		

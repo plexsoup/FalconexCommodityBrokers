@@ -74,20 +74,21 @@ func getColumTextForListing():
 	return columnText
 	
 func setPrices(planetType):
-	var priceIncreaseFactor = 3.0
+	var priceIncreaseFactor = 0.125 / PlanetSize
+	# planet scale is 0.1 to 0.3. 1/.1 = 10 1/.3 = 30
 	match planetType:
 		"agricultural":
 			MyCommodityType = "wheat"
-			PriceList = {"wheat":floor(50*PlanetSize), "cog":floor(150*PlanetSize), "diamond":floor(100*PlanetSize)}
+			PriceList = {"wheat":50, "cog":150, "diamond":100}
 		"industrial":
 			MyCommodityType = "cog"
-			PriceList = {"wheat":floor(50*PlanetSize), "cog":floor(100*PlanetSize), "diamond":floor(150*PlanetSize)}
+			PriceList = {"wheat":50, "cog":100, "diamond":150}
 		"mining":
 			MyCommodityType = "diamond"
-			PriceList = {"wheat":floor(150*PlanetSize), "cog":floor(100*PlanetSize), "diamond":floor(50*PlanetSize)}
+			PriceList = {"wheat":150, "cog":100, "diamond":50}
 	for item in PriceList:
-		PriceList[item] *= priceIncreaseFactor
-
+		PriceList[item] = floor(PriceList[item] * priceIncreaseFactor)
+		#print(self.name, "PriceList[", item, "] == " , PriceList[item])
 
 #func setSpeed():
 #	var distToStar = get_global_position().distance_to(MyStar.get_global_position())

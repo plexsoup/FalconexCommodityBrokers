@@ -102,6 +102,9 @@ func _process(delta):
 	if Input.is_action_just_pressed("ui_accept"):
 		revealAllLettersOrShowNextLine()
 
+	if Input.is_action_just_pressed("shoot"):
+		revealAllLettersOrShowNextLine()
+
 
 
 func _on_LetterTimer_timeout():

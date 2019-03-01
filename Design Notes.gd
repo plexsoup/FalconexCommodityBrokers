@@ -8,20 +8,22 @@ TODO:
 			- lasers, missiles, shield, cargo hold, engines
 
 Notes regarding Design Decisions:
-	- what if, instead of selecting the planet, one was selected at random?
+	- Initially, players had to select the delivery destination manually.
+		- it's more fun if the game provides a destination randomly
 	
 	- removed purchase price from commodities. planets kick them out for free now
 		- spending money isn't fun, unless it's on ship upgrades
-	- it's very easy to bump into the wrong planet..
-		- selling should only work for the planet you have selected in the list
-	- instead of having 3 prices. Make planets only buy 1 type of commodity.
-	
 
-Features Required
-	- create enemies
-	- spawn enemeis at intervals
-	- they attack the player
-	
+	- initially, all planets would buy your goods.
+		- selling now only works for the selected planet
+		
+	- Considered making planets only take 1 commodity, instead of offering different prices for 3
+		- But, I kinda like the spreadsheet-y feel to the sidebar
+
+Minimum Features Required
+	- create enemies - done
+	- spawn enemeis at intervals - done
+	- they attack the player -done	
 	- spinning solar systems - done
 	- have three type of planets: gear, wheat, diamond - done
 	- planets drop loot - done
@@ -32,9 +34,10 @@ Features Required
 
 
 Bugs to Fix
-	- inventory warning isn't showing up	
 	
-	- lasers sometimes hang around
+	- add a pause option
+	- html export has double-image
+		- maybe because of two viewports.
 	
 	
 	- opening and closing the sidebar selects a planet
@@ -44,28 +47,15 @@ Bugs to Fix
 	
 	
 Game-Feel / User Experience Enhancements to Make
-	- magnet upgrade = invincible. can't lose items.
-		- make losing item have a chance of destroying it
-		
-	
-	- when mouse is over button, pressing space activates the button
-		
-	- inventory should be displayed at top of screen always
-	- need a voice message for purchasing upgrade.
-	
 	
 	- when you hit enemies, the second hit should not show a shield
 	
-	- when you sell, remove your compass target
-	- make cash popup spawn a bit closer
+	- make cash popups further apart
 	
 	- give enemy more behaviour.. 
-		- dont shoot player unless they have serious cargo
 		- vector move towards commodities
-		- appoint a scooper and a flanker?
-
+		
 	- add a bounce noise to planets?
-	- add a tween to commodity spawning
 
 """
 

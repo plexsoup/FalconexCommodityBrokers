@@ -28,7 +28,8 @@ func fireAllGuns():
 
 func fireBullet(muzzle):
 	#print(self.name, " MyShip linear_velocity == ", MyShip.get_linear_velocity())
-	emit_signal("bullet_requested", muzzle.get_global_position(), muzzle.get_global_rotation(), MyShip.get_linear_velocity(), Bullet)
+	var rot = muzzle.get_global_rotation() + randf()*0.035 - 0.0175
+	emit_signal("bullet_requested", muzzle.get_global_position(), rot, MyShip.get_linear_velocity(), Bullet)
 	
 #	var newBullet = Bullet.instance()
 #	global.getCurrentLevel().get_node("Bullets").add_child(newBullet)

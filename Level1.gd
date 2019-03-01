@@ -20,27 +20,29 @@ func _ready():
 	yield(get_tree().create_timer(0.5), "timeout") # wait for globals
 	
 	var textArr = [
-	"""
-		FalconEx Commodity Brokers\n\n
-		You are the greatest merchant in the galaxy. You deliver goods
-		between planets, always lookng for the best price.
-	""",
-	"""
-		Pickup goods by bumping into planets. Then consult the sidebar
-		and select the planet with the best purchasing price.
-		\n
-		Once you have a planet selected, your nav system will light up the path.
-		\n
-		Note: You will only sell to the planet you've chosen from the list.
-	""",
-	"""
-		Use WASD to fly.
-		Space to Shoot.
-		Mouse Wheel to zoom.
-		Click the ||| to open the sidebar.
-		Use the mouse to select a planet from the list.
-	""",
-		"Use your cash to buy upgrades from the left sidebar."
+	"""[b]FalconEx[/b]
+\t[i]Galactic Commodities Brokers[/i]
+\t\t'Your first choice in delivery excellence!'
+
+When you need goods delivered fast, consider FalconEx.
+Our pilots are military-trained, so pirates pose no problem.""",
+
+"""[i]Welcome new Pilot[/i]
+Pickup goods by bumping into planets. 
+
+When your cargo hold is full, the nav-system will provide a delivery destination.
+If you prefer, you can use the sidebar [|||] to choose your own buyer.
+
+Once your path is highlighted, proceed to that planet to sell your goods.""",
+
+"""[i]Commencing Military Training...[/i]
+
+\tUse WASD to fly and Space to Shoot.
+\tMouse Wheel to zoom your view.
+\tClick the [|||] button to open a sidebar.
+\tUse the mouse to select a buyer from the right sidebar.
+\tUse your cash to buy upgrades from the left sidebar.""",
+		
 	]
 
 	CurrentState = STATES.frozen
@@ -60,7 +62,6 @@ func spawnDialogBox(textArr):
 	var newDialogBox = dialogBox.instance()
 	$CanvasLayer/DialogBoxes.add_child(newDialogBox)
 	newDialogBox.start(textArr, self)
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
@@ -142,4 +143,8 @@ func _on_ship_filled_inventory():
 	var warningLabel = warningPanel.get_node("WarningLabel")
 	warningPanel.flashMessage()
 	
-	
+func _on_UpgradeButtons_upgrade_pressed(typeOfUpgrade, requestingObj):
+	# maybe we'll do something interesting with the type of upgrade someday.	
+
+	# for now...
+	MaxEnemies += 5

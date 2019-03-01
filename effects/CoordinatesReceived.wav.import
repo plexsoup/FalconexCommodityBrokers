@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/CoordinatesReceived.wav-6069697cdefca43b10c675f2860b44e4.sample"
+
+[deps]
+
+source_file="res://effects/CoordinatesReceived.wav"
+dest_files=[ "res://.import/CoordinatesReceived.wav-6069697cdefca43b10c675f2860b44e4.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

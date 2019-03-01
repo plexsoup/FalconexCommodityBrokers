@@ -1,21 +1,19 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://Level1.gd" type="Script" id=1]
 [ext_resource path="res://Design Notes.gd" type="Script" id=2]
 [ext_resource path="res://galaxy.gd" type="Script" id=3]
 [ext_resource path="res://planets/activesuperm.png" type="Texture" id=4]
-[ext_resource path="res://stars.png" type="Texture" id=5]
-[ext_resource path="res://nebula.png" type="Texture" id=6]
-[ext_resource path="res://WarningPanel.gd" type="Script" id=7]
-[ext_resource path="res://styles/scifi_theme.tres" type="Theme" id=8]
-[ext_resource path="res://InventoryDisplayPanel.gd" type="Script" id=9]
-[ext_resource path="res://icons/wheat.png" type="Texture" id=10]
-[ext_resource path="res://styles/fonts/Righteous26.tres" type="DynamicFont" id=11]
-[ext_resource path="res://InvDisplayLabel.gd" type="Script" id=12]
-[ext_resource path="res://icons/cog.png" type="Texture" id=13]
-[ext_resource path="res://icons/cut-diamond.png" type="Texture" id=14]
-[ext_resource path="res://icons/crown-coin.png" type="Texture" id=15]
-[ext_resource path="res://GravWell.gd" type="Script" id=16]
+[ext_resource path="res://WarningPanel.gd" type="Script" id=5]
+[ext_resource path="res://styles/scifi_theme.tres" type="Theme" id=6]
+[ext_resource path="res://InventoryDisplayPanel.gd" type="Script" id=7]
+[ext_resource path="res://icons/wheat.png" type="Texture" id=8]
+[ext_resource path="res://styles/fonts/Righteous26.tres" type="DynamicFont" id=9]
+[ext_resource path="res://InvDisplayLabel.gd" type="Script" id=10]
+[ext_resource path="res://icons/cog.png" type="Texture" id=11]
+[ext_resource path="res://icons/cut-diamond.png" type="Texture" id=12]
+[ext_resource path="res://icons/crown-coin.png" type="Texture" id=13]
+[ext_resource path="res://GravWell.gd" type="Script" id=14]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 14.9678
@@ -31,6 +29,9 @@ script = ExtResource( 2 )
 
 [node name="galaxy" type="Node2D" parent="."]
 script = ExtResource( 3 )
+
+[node name="BGStars" type="Node2D" parent="galaxy"]
+self_modulate = Color( 1, 1, 1, 0.501961 )
 
 [node name="BlackHole" type="StaticBody2D" parent="galaxy"]
 collision_layer = 8
@@ -51,38 +52,6 @@ shape = SubResource( 1 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="ParallaxBackground" type="ParallaxBackground" parent="CanvasLayer"]
-scale = Vector2( 3, 3 )
-transform = Transform2D( 3, 0, 0, 3, 0, 0 )
-
-[node name="BGStars" type="ParallaxLayer" parent="CanvasLayer/ParallaxBackground"]
-editor/display_folded = true
-visible = false
-position = Vector2( 252.985, 252.985 )
-scale = Vector2( 2, 2 )
-motion_scale = Vector2( 0.3, 0.3 )
-motion_mirroring = Vector2( 2048, 2048 )
-
-[node name="Sprite" type="Sprite" parent="CanvasLayer/ParallaxBackground/BGStars"]
-self_modulate = Color( 1, 1, 1, 0.117647 )
-texture = ExtResource( 5 )
-centered = false
-region_enabled = true
-region_rect = Rect2( 0, 0, 2048, 2048 )
-
-[node name="BGNebula" type="ParallaxLayer" parent="CanvasLayer/ParallaxBackground"]
-editor/display_folded = true
-visible = false
-motion_scale = Vector2( 0.2, 0.2 )
-motion_mirroring = Vector2( 2048, 2048 )
-
-[node name="Sprite" type="Sprite" parent="CanvasLayer/ParallaxBackground/BGNebula"]
-self_modulate = Color( 1, 1, 1, 0.0784314 )
-texture = ExtResource( 6 )
-centered = false
-region_enabled = true
-region_rect = Rect2( 0, 0, 2048, 2048 )
-
 [node name="DialogBoxes" type="Control" parent="CanvasLayer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -94,14 +63,14 @@ anchor_right = 0.5
 margin_left = -59.0
 margin_right = 111.0
 margin_bottom = 35.0
-script = ExtResource( 7 )
+script = ExtResource( 5 )
 
 [node name="WarningLabel" type="Label" parent="CanvasLayer/WarningPanel"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 163.0
 margin_bottom = 28.0
-theme = ExtResource( 8 )
+theme = ExtResource( 6 )
 text = "Alert: Inventory Full!"
 
 [node name="InventoryDisplayPanel" type="PanelContainer" parent="CanvasLayer"]
@@ -111,8 +80,8 @@ margin_left = -226.0
 margin_bottom = 47.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource( 8 )
-script = ExtResource( 9 )
+theme = ExtResource( 6 )
+script = ExtResource( 7 )
 
 [node name="GridContainer" type="GridContainer" parent="CanvasLayer/InventoryDisplayPanel"]
 margin_left = 7.0
@@ -127,7 +96,7 @@ margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
-texture = ExtResource( 10 )
+texture = ExtResource( 8 )
 expand = true
 
 [node name="WheatLabel" type="Label" parent="CanvasLayer/InventoryDisplayPanel/GridContainer"]
@@ -137,10 +106,10 @@ margin_bottom = 33.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme = ExtResource( 8 )
-custom_fonts/font = ExtResource( 11 )
+theme = ExtResource( 6 )
+custom_fonts/font = ExtResource( 9 )
 text = "5"
-script = ExtResource( 12 )
+script = ExtResource( 10 )
 
 [node name="Cog" type="TextureRect" parent="CanvasLayer/InventoryDisplayPanel/GridContainer"]
 margin_left = 72.0
@@ -149,7 +118,7 @@ margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
-texture = ExtResource( 13 )
+texture = ExtResource( 11 )
 expand = true
 
 [node name="CogLabel" type="Label" parent="CanvasLayer/InventoryDisplayPanel/GridContainer"]
@@ -159,10 +128,10 @@ margin_bottom = 33.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme = ExtResource( 8 )
-custom_fonts/font = ExtResource( 11 )
+theme = ExtResource( 6 )
+custom_fonts/font = ExtResource( 9 )
 text = "5"
-script = ExtResource( 12 )
+script = ExtResource( 10 )
 CommodityType = "cog"
 
 [node name="Diamond" type="TextureRect" parent="CanvasLayer/InventoryDisplayPanel/GridContainer"]
@@ -172,7 +141,7 @@ margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
-texture = ExtResource( 14 )
+texture = ExtResource( 12 )
 expand = true
 
 [node name="DiamondLabel" type="Label" parent="CanvasLayer/InventoryDisplayPanel/GridContainer"]
@@ -182,16 +151,16 @@ margin_bottom = 33.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme = ExtResource( 8 )
-custom_fonts/font = ExtResource( 11 )
+theme = ExtResource( 6 )
+custom_fonts/font = ExtResource( 9 )
 text = "5"
-script = ExtResource( 12 )
+script = ExtResource( 10 )
 CommodityType = "diamond"
 
 [node name="CashDisplayPanel" type="PanelContainer" parent="CanvasLayer"]
 margin_right = 14.0
 margin_bottom = 14.0
-script = ExtResource( 9 )
+script = ExtResource( 7 )
 
 [node name="GridContainer" type="GridContainer" parent="CanvasLayer/CashDisplayPanel"]
 margin_left = 7.0
@@ -204,7 +173,7 @@ columns = 2
 margin_right = 32.0
 margin_bottom = 33.0
 rect_min_size = Vector2( 32, 32 )
-texture = ExtResource( 15 )
+texture = ExtResource( 13 )
 expand = true
 
 [node name="CashOnHand" type="Label" parent="CanvasLayer/CashDisplayPanel/GridContainer"]
@@ -214,10 +183,10 @@ margin_bottom = 33.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme = ExtResource( 8 )
-custom_fonts/font = ExtResource( 11 )
+theme = ExtResource( 6 )
+custom_fonts/font = ExtResource( 9 )
 text = "5"
-script = ExtResource( 12 )
+script = ExtResource( 10 )
 CommodityType = "cash"
 
 [node name="Bullets" type="Node2D" parent="."]
@@ -232,7 +201,7 @@ gravity = 250.0
 linear_damp = 0.03
 angular_damp = 5.0
 priority = 20.0
-script = ExtResource( 16 )
+script = ExtResource( 14 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GravWell"]
 visible = false

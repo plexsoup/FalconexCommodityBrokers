@@ -32,6 +32,10 @@ var Cash : int = 0
 var rotation_dir = 0
 var screensize
 
+var Shielded : bool = false
+var MaxShields : int = 0
+var Shields : int = 0
+
 signal sell(commodityName, quantity)
 signal buy(shipObj)
 signal cash_popup_requested(pos, amount)
@@ -124,15 +128,16 @@ func sellGoodsToPlanet(planet):
 			CompassTarget = null
 	
 func buyGoodsFromPlanet(planet):
-	connect("buy", planet, "_on_ship_commodities_requested")
-	emit_signal("buy", self)
-	disconnect("buy", planet, "_on_ship_commodities_requested")
+	if planet != CompassTarget:
+		connect("buy", planet, "_on_ship_commodities_requested")
+		emit_signal("buy", self)
+		disconnect("buy", planet, "_on_ship_commodities_requested")
 	
 func tradeCommodities(planetArr):
 	if planetArr != null and planetArr.size() > 0:
 		for planet in planetArr:
-			sellGoodsToPlanet(planet)
 			buyGoodsFromPlanet(planet)
+			sellGoodsToPlanet(planet)
 	
 func pickup_commodity(collectibleObj, commodityType):
 	# Note: This is called from a foreign class:
@@ -144,11 +149,15 @@ func pickup_commodity(collectibleObj, commodityType):
 		disconnect("picked_up_commodity", collectibleObj, "_on_ship_picked_up_commodity")
 		if getInventoryItemCount() == MaxInventoryCount:
 			$InventoryFullNoise.play()
+
 			alertFullInventory()
 	else:
 		pass # ignore items after you've notified about full inventory
 	
 	
+func selectRandomDeliveryDestination():
+	CompassTarget = global.getGalaxy().getRandomPlanet()
+	$CoordinatesReceivedNoise.play()
 	
 	
 	
@@ -226,7 +235,7 @@ func _on_PlanetList_selected_object(object):
 	CompassTarget = object
 	
 func _on_planet_purchase_accepted(commodityName, quantity, cashGiven):
-	print(self.name , " planet accepted our sale: ", commodityName, ", ", " quantity ", quantity, " , cashGiven ", cashGiven )
+	#print(self.name , " planet accepted our sale: ", commodityName, ", ", " quantity ", quantity, " , cashGiven ", cashGiven )
 	Cash += cashGiven
 	CommoditiesHeld[commodityName] -= quantity
 	emit_signal("cash_popup_requested", get_global_position(), cashGiven)
@@ -254,53 +263,59 @@ func loseItem():
 	
 	
 func _on_hit(amount):
-	$CrashNoise.play()
-	# give up commodities first, then cash
-	loseItem()			
+	if Shielded == false or Shields <= 0:
+		$CrashNoise.play()
+		# give up commodities first, then cash
+		loseItem()
+	else:
+		if $AnimationPlayer.is_playing() == false:
+			$AnimationPlayer.play("shields")
+			Shields -= 100
+			$Shield/ShieldRechargeTimer.start()
+		
 			
 func _on_UpgradeButtons_upgrade_pressed(upgradeType, requestingObj):
-	match upgradeType:
-		"lasers":
-			var costOfUpgrade = 1000
-			if Cash >= costOfUpgrade:
+	var costOfUpgrade = 1000
+	if Cash >= costOfUpgrade:
+		Cash -= costOfUpgrade
+		match upgradeType:
+			"lasers":
 				$Weapons/DualLasers/ReloadTimer.set_wait_time(0.1)
 				$Weapons/DualLasers.Bullet = load("res://bullets/Laser2.tscn")
-				Cash -= costOfUpgrade
-			
-		"engines":
-			var costOfUpgrade = 1000
-			if Cash >= costOfUpgrade:
+			"engines":
 				MaxThrust = 5500
 				ThrustIncrement = 1200
 				SpinThrust = 35000
 				MaxSpeed = 7500
-				Cash -= costOfUpgrade
-
-		"shields":
-			var costOfUpgrade = 1000
-			if Cash >= costOfUpgrade:
-				pass # **** Implement this
-				Cash -= costOfUpgrade
-			
-		"missiles":
-			var costOfUpgrade = 1000
-			if Cash >= costOfUpgrade:
+			"shields":
+				Shielded = true
+				MaxShields = 500
+				Shields = 500
+				$Shield/ShieldRechargeTimer.start()
+			"missiles":
 				$Weapons/MissileLaunchers/ReloadTimer.set_wait_time(0.3)
-				Cash -= costOfUpgrade
-
-		"magnet": #0 = 253, 1 = 512, 2 = 750, 3 = 1500
-			var costOfUpgrade = 1000
-			if Cash >= costOfUpgrade:
+			"magnet": #0 = 253, 1 = 512, 2 = 750, 3 = 1500
 				var shape = $Magnet/CollisionShape2D.get_shape()
 				shape.set_radius(750)
-				Cash -= costOfUpgrade
-
-		"targeting":
-			pass
+			"targeting":
+				pass
 		
-		"storage":
-			var costOfUpgrade = 1000
-			if Cash >= costOfUpgrade:
+			"storage":
 				MaxInventoryCount = 32
-				Cash -= costOfUpgrade
+		#Notify the Level to increase MaxEnemies
+		
+			
 
+
+
+func _on_InventoryFullNoise_finished():
+	if CompassTarget == null:
+		selectRandomDeliveryDestination()
+
+
+func _on_ShieldRechargeTimer_timeout():
+	if Shielded == true and Shields < MaxShields:
+		Shields += 100
+		print(self.name, " Shields == " , Shields)
+	$Shield/ShieldRechargeTimer.start()
+		

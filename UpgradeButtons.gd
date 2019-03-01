@@ -32,7 +32,7 @@ func setButtonStatus():
 				"upgEnginesBtn":
 					object.set_disabled(false)
 				"upgShieldsBtn":
-					object.set_disabled(true)
+					object.set_disabled(false)
 				"upgMissilesBtn":
 					object.set_disabled(false)
 				"upgMagnetBtn":
@@ -47,6 +47,8 @@ func setButtonStatus():
 
 func connectSignals():
 	connect("upgrade", CurrentShip, "_on_UpgradeButtons_upgrade_pressed")
+	connect("upgrade", global.getCurrentLevel(), "_on_UpgradeButtons_upgrade_pressed")
+	
 	CurrentState = STATES.ready
 
 func checkSufficientCash():

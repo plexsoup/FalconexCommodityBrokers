@@ -24,7 +24,18 @@ func spawnStars(numStars):
 		var dist = 4400 + randi()%3600
 		
 		newStar.start(self, dist, direction)
+	spawnBackgroundStars(150)
+
+func spawnBackgroundStars(numStars):
+	var BGStarScene = load("res://planets/BGStars.tscn")
+	for i in range(randi()%(2*numStars)):
+		var newBGStarCluster = BGStarScene.instance()
 		
+		var randDirection = randf()*2*PI
+		var randDistance = randf()*GalaxyLimitRadius
+		newBGStarCluster.set_global_position((Vector2(1, 0)*randDistance).rotated(randDirection))
+		$"BGStars".add_child(newBGStarCluster)
+
 func getStars():
 	return StarSystems.get_children()
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://ships/ship.gd" type="Script" id=1]
 [ext_resource path="res://Camera2D.gd" type="Script" id=2]
@@ -15,12 +15,80 @@
 [ext_resource path="res://ships/Magnet.gd" type="Script" id=13]
 [ext_resource path="res://effects/crash.ogg" type="AudioStream" id=14]
 [ext_resource path="res://effects/inventoryFull.wav" type="AudioStream" id=15]
+[ext_resource path="res://effects/CoordinatesReceived.wav" type="AudioStream" id=16]
+[ext_resource path="res://effects/shields.png" type="Texture" id=17]
+[ext_resource path="res://effects/shields.wav" type="AudioStream" id=18]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 29.8351, 31.1695 )
 
 [sub_resource type="CircleShape2D" id=2]
 radius = 283.598
+
+[sub_resource type="Animation" id=3]
+resource_name = "shields"
+length = 0.5
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("Shield/ShieldNoise:playing")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.05, 0.45 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Shield:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.05, 0.45, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, true, false ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Shield:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0.439216, 0.854902, 0.34902, 0 ), Color( 0.439216, 0.854902, 0.34902, 1 ), Color( 0.439216, 0.854902, 0.34902, 0 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Shield:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0.05, 0.15, 0.25, 0.35, 0.45 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0.3, 0.3 ), Vector2( 0.45, 0.5 ), Vector2( 0.5, 0.5 ), Vector2( 0.5, 0.58 ), Vector2( 0.3, 0.3 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Shield:rotation_degrees")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0.05, 0.15, 0.35, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 3.0, -5.0, 0.0 ]
+}
 
 [node name="Ship" type="RigidBody2D"]
 collision_mask = 7
@@ -114,6 +182,7 @@ collision_mask = 16
 script = ExtResource( 13 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Magnet"]
+visible = false
 shape = SubResource( 2 )
 
 [node name="PopupEffects" type="Node2D" parent="."]
@@ -126,4 +195,30 @@ volume_db = -23.347
 stream = ExtResource( 15 )
 volume_db = -9.0
 
+[node name="CoordinatesReceivedNoise" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 16 )
+volume_db = -9.0
+
+[node name="Shield" type="Sprite" parent="."]
+visible = false
+self_modulate = Color( 0.439216, 0.854902, 0.34902, 0 )
+scale = Vector2( 0.3, 0.3 )
+texture = ExtResource( 17 )
+
+[node name="ShieldNoise" type="AudioStreamPlayer2D" parent="Shield"]
+stream = ExtResource( 18 )
+volume_db = -9.0
+
+[node name="ShieldTimer" type="Timer" parent="Shield"]
+wait_time = 0.4
+
+[node name="ShieldRechargeTimer" type="Timer" parent="Shield"]
+wait_time = 3.0
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/shields = SubResource( 3 )
+
 [connection signal="timeout" from="Weapons/MissileLaunchers/ReloadTimer" to="Weapons/MissileLaunchers" method="_on_ReloadTimer_timeout"]
+[connection signal="finished" from="InventoryFullNoise" to="." method="_on_InventoryFullNoise_finished"]
+[connection signal="timeout" from="Shield/ShieldRechargeTimer" to="." method="_on_ShieldRechargeTimer_timeout"]
