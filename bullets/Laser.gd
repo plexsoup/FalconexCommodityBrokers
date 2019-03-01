@@ -52,15 +52,13 @@ func _process(delta):
 
 	if Ticks == 1:
 		showMuzzleFlash()
+		showLaser()
 	elif Ticks == 2:
 		hideMuzzleFlash()
-	elif Ticks == 3:
-		CurrentState = STATES.laser 
-		showLaser()
+		CurrentState = STATES.laser
 
-	else:
-		CurrentPos = get_global_position() + Velocity * delta
-		set_global_position( CurrentPos )
+	CurrentPos = get_global_position() + Velocity * delta
+	set_global_position( CurrentPos )
 	
 
 func _on_Duration_timeout():

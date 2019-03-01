@@ -47,6 +47,10 @@ Bugs to Fix
 	
 	
 Game-Feel / User Experience Enhancements to Make
+	- needs a music track, but I haven't settled on one
+		- maybe back to bosca.ceoil or turtle.audio
+	- stars could have a self-modulate to make their colors a litle different from each other
+	- be nice to have a couple different planets too
 	
 	- when you hit enemies, the second hit should not show a shield
 	
@@ -55,8 +59,7 @@ Game-Feel / User Experience Enhancements to Make
 	- give enemy more behaviour.. 
 		- vector move towards commodities
 		
-	- add a bounce noise to planets?
-
+	
 """
 
 extends Node
