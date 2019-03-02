@@ -15,6 +15,7 @@ SceneTree should look like this:
 extends Control
 
 # Declare member variables here. Examples:
+
 export var DialogText : Array  = [""]
 
 onready var LetterTimer = $DialogTextLabel/LetterTimer
@@ -25,18 +26,24 @@ var CurrentLine = 0
 var DisplayedText = ""
 var CurrentLineText = ""
 var NumLettersDisplayed : int = 0
+var GUID : String
+var RequestedBy
+var BoxTitle : String
 
 #var NodeToFollow
 
 signal initialized
-signal completed
+signal completed(boxName, requestedBy)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass
 
-func start(textArray : Array, parentScene):
+func start(boxTitle : String, textArray : Array, parentScene, requestedBy):
+	BoxTitle = boxTitle
 	DialogText = textArray
+	RequestedBy = requestedBy
+	#GUID = getCallbackIndex()
 		
 	#connect("initialized", global.getCurrentPlayer(), "_on_dialogBox_initialized")
 	connect("completed", parentScene, "_on_DialogBox_completed")
@@ -54,9 +61,25 @@ func start(textArray : Array, parentScene):
 	#DialogBox.set_position(newPosition)
 
 	#emit_signal("initialized")
+	return GUID
+
+#func arr2str(arr):
+#	var returnStr = ""
+#	for i in arr:
+#		returnStr += i
+#	return returnStr
+
+# this works, but it's not needed
+#func getCallbackIndex():
+#	var textStr = "a,b,c,d,e,f,1,2,3,4,5,6,7,8,a,b,c,d,e,f,1,2,3,4,5,6,7,8"
+#	var textArr = Array(textStr.split(","))
+#	textArr.shuffle()
+#	var GUIDStr = arr2str(textArr)
+#	print(self.name, " GID == ", GUIDStr)
+#	return GUIDStr
 	
 func end():
-	emit_signal("completed")
+	emit_signal("completed", BoxTitle, RequestedBy)
 
 	queue_free()
 

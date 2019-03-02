@@ -33,16 +33,22 @@ func slidePanel():
 	$SlideNoise.play()
 
 func openPanel():
+	$PanelContainer/VBoxContainer.show()
 	PreviousOffset = ClosedOffset
 	DesiredOffset = OpenOffset
 	slidePanel()
-
+	
+	
 	#set_split_offset(InitialOffset - 300)
 	
 func closePanel():
 	PreviousOffset = OpenOffset
 	DesiredOffset = ClosedOffset
 	slidePanel()
+	var tween = get_node("Tween")
+	yield(tween, "tween_completed")	
+	$PanelContainer/VBoxContainer.hide()
+	
 	#set_split_offset(InitialOffset)
 
 

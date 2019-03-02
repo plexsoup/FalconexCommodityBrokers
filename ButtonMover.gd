@@ -9,5 +9,5 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	position.x = MySplitContainer.get_split_offset() - 125
+	position.x = MySplitContainer.get_split_offset() - 140
 	

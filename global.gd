@@ -2,6 +2,7 @@ extends Node
 
 # Declare member variables here. Examples:
 
+var Main
 var CurrentScene
 var CurrentPlayerController
 var CurrentPlayerShip : RigidBody2D = null
@@ -14,6 +15,12 @@ var GameSpeed : float = 1.0
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
+
+func setMain(scene):
+	Main = scene
+	
+func getMain():
+	return Main
 
 func getPlayerShip():
 	return CurrentPlayerShip

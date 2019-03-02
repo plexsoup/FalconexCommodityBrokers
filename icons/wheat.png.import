@@ -3,6 +3,9 @@
 importer="texture"
 type="StreamTexture"
 path="res://.import/wheat.png-995f9d0e2c5f5099af06a80288e389e9.stex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 

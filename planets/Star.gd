@@ -25,6 +25,8 @@ func start(myGalaxy, distFromGalaxyCenter, direction):
 	generateName()
 	spawnPlanets(randi()%7 +1)
 	
+	$SunSprite.set_self_modulate(Color(rand_range(0.5,1.0), rand_range(0.5,1.0), rand_range(0.5,1.0)))
+	set_scale(get_scale()*rand_range(0.25, 1.25))
 
 func spawnPlanets(numPlanets):
 	var PlanetScene = load("res://planets/Planet.tscn")

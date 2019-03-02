@@ -2,7 +2,7 @@ extends Area2D
 
 # Declare member variables here. Examples:
 var Velocity : Vector2
-var Speed : float = 1800
+export var Speed : float = 1800
 #var TimeElapsed = 0.0
 var Ticks : int = 0
 var BaseRot

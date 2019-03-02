@@ -1,32 +1,38 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://bullets/Laser.gd" type="Script" id=1]
-[ext_resource path="res://bullets/laser2.png" type="Texture" id=2]
+[ext_resource path="res://bullets/laser4-yellow.png" type="Texture" id=2]
 [ext_resource path="res://effects/muzzleFlash2.png" type="Texture" id=3]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 77.318, 22.0702 )
+extents = Vector2( 166.894, 46.187 )
 
 [node name="Laser" type="Area2D"]
 position = Vector2( 2.99368, -0.302799 )
 collision_layer = 32
 collision_mask = 2
 script = ExtResource( 1 )
+Speed = 3500.0
 Damage = 200
 
 [node name="LaserSprite" type="Sprite" parent="."]
-self_modulate = Color( 1, 0, 0.560784, 1 )
-position = Vector2( 81.9271, -0.7417 )
-scale = Vector2( 1.34619, 2.78695 )
+modulate = Color( 1, 1, 1, 0.501961 )
+position = Vector2( 121.649, -0.344506 )
+scale = Vector2( 0.75, 0.5 )
 texture = ExtResource( 2 )
+
+[node name="ColorRect" type="ColorRect" parent="LaserSprite"]
+margin_left = -134.0
+margin_top = -5.0
+margin_right = 133.0
+margin_bottom = 9.0
 
 [node name="Duration" type="Timer" parent="."]
 wait_time = 2.0
 autostart = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2( 76.6006, 0.451874 )
+position = Vector2( 163.481, -0.471313 )
 shape = SubResource( 1 )
 
 [node name="MuzzleFlashSprite" type="Sprite" parent="."]

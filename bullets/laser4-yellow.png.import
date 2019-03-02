@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/crown-coin.png-df9846330f641e30494365790f171e90.stex"
+path="res://.import/laser4-yellow.png-bf27291beb58f39150be618fd328c6b1.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://icons/crown-coin.png"
-dest_files=[ "res://.import/crown-coin.png-df9846330f641e30494365790f171e90.stex" ]
+source_file="res://bullets/laser4-yellow.png"
+dest_files=[ "res://.import/laser4-yellow.png-bf27291beb58f39150be618fd328c6b1.stex" ]
 
 [params]
 

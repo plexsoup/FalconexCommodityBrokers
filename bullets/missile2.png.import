@@ -3,6 +3,9 @@
 importer="texture"
 type="StreamTexture"
 path="res://.import/missile2.png-21930ad594f52ac98564770e6a0c4e32.stex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 

@@ -27,6 +27,8 @@ var CommodityTypes = ["wheat", "diamond", "cog"]
 var CommoditiesHeld = {"wheat":0, "diamond":0, "cog":0}
 var MaxInventoryCount = 16
 
+var UpgradesDict = {"lasers":0, "engines":0, "shields":0, "missiles":0, "magnet":0, "targeting":0, "mines":0, "storage":0}
+var MaxUpgrades = {"lasers":2, "engines":1, "shields":2, "missiles":2, "magnet":2, "targeting":0, "mines":0, "storage":2}
 var Cash : int = 0
 
 var rotation_dir = 0
@@ -35,6 +37,7 @@ var screensize
 var Shielded : bool = false
 var MaxShields : int = 0
 var Shields : int = 0
+var ShieldAnimation : String = "shields0"
 
 signal sell(commodityName, quantity)
 signal buy(shipObj)
@@ -57,7 +60,7 @@ func start():
 	connect("cash_popup_requested", global.getCurrentLevel(), "_on_ship_cash_popup_requested")
 
 func get_input():
-	if Input.is_action_pressed("ui_up"):
+	if Input.is_action_pressed("applyThrust"):
 		CurrentThrust += ThrustIncrement
 		CurrentThrust = clamp(CurrentThrust, 0, MaxThrust)
 		ThrustVector = Vector2(CurrentThrust, 0)
@@ -65,13 +68,15 @@ func get_input():
 		ThrustVector = Vector2(0, 0)
 		CurrentThrust = 0
 	rotation_dir = 0
-	if Input.is_action_pressed("ui_right"):
+	if Input.is_action_pressed("turnRight"):
 		rotation_dir += 1
-	if Input.is_action_pressed("ui_left"):
+	if Input.is_action_pressed("turnLeft"):
 		rotation_dir -= 1
 
 func setThrustEffect():
-	$thrust.set_scale(Vector2(1, CurrentThrust/MaxThrust))
+	var maximumPossibleThrust = 5500 # allow jet to look bigger after upgrade
+	$thrust.set_scale(Vector2(1, CurrentThrust/maximumPossibleThrust * rand_range(0.9, 1.0)))
+	$thrust.set_rotation(rand_range(-0.1, 0.1))
 	if CurrentThrust > 0:
 		if EngineSound.is_playing() == false:
 			EngineSound.play()
@@ -263,45 +268,78 @@ func loseItem():
 	
 	
 func _on_hit(amount):
+	
 	if Shielded == false or Shields <= 0:
 		$CrashNoise.play()
 		# give up commodities first, then cash
 		loseItem()
+		$Shield.hide()
 	else:
-		if $AnimationPlayer.is_playing() == false:
-			$AnimationPlayer.play("shields")
+		# **** TODO: Move this logic into Shields object
+		if $Shield/AnimationPlayer.is_playing() == false:
+			$Shield/AnimationPlayer.play(ShieldAnimation)
 			Shields -= 100
 			$Shield/ShieldRechargeTimer.start()
 		
-			
-func _on_UpgradeButtons_upgrade_pressed(upgradeType, requestingObj):
-	var costOfUpgrade = 1000
+func getMaxUpgrade(upgradeType):
+	return MaxUpgrades[upgradeType]
+
+func _on_UpgradeButtons_upgrade_pressed(upgradeType, upgradeCost, requestingObj):
+	var costOfUpgrade = upgradeCost
 	if Cash >= costOfUpgrade:
 		Cash -= costOfUpgrade
+		UpgradesDict[upgradeType] += 1
+		var level = UpgradesDict[upgradeType]
 		match upgradeType:
 			"lasers":
-				$Weapons/DualLasers/ReloadTimer.set_wait_time(0.1)
-				$Weapons/DualLasers.Bullet = load("res://bullets/Laser2.tscn")
+				if level == 1:
+					$Weapons/DualLasers/ReloadTimer.set_wait_time(0.08)
+					$Weapons/DualLasers.Bullet = load("res://bullets/Laser2.tscn")
+				elif level == 2:
+					$Weapons/DualLasers/Muzzles/Port2.show()
+					$Weapons/DualLasers/Muzzles/Starboard2.show()
 			"engines":
-				MaxThrust = 5500
-				ThrustIncrement = 1200
-				SpinThrust = 35000
-				MaxSpeed = 7500
+				if level == 1:
+					MaxThrust = 5500
+					ThrustIncrement = 1200
+					SpinThrust = 35000
+					MaxSpeed = 7500
+					$thrust.set_self_modulate(Color.aquamarine)
 			"shields":
-				Shielded = true
-				MaxShields = 500
-				Shields = 500
+				if level == 1:
+					$Shield.upgradeShields(1)
+					Shielded = true
+					MaxShields = 500
+					ShieldAnimation = "shields1"
+				elif level == 2:
+					$Shield.upgradeShields(2)
+					MaxShields = 1000
+					ShieldAnimation = "shields2"
+					
+				Shields = MaxShields
+				$Shield/AnimationPlayer.play(ShieldAnimation)
 				$Shield/ShieldRechargeTimer.start()
+				
 			"missiles":
-				$Weapons/MissileLaunchers/ReloadTimer.set_wait_time(0.3)
-			"magnet": #0 = 253, 1 = 512, 2 = 750, 3 = 1500
+				if level == 1:
+					$Weapons/MissileLaunchers/Muzzles/Port.show()
+					$Weapons/MissileLaunchers/Muzzles/Starboard.show()
+				elif level == 2:
+					$Weapons/MissileLaunchers/ReloadTimer.set_wait_time(0.15)
+			"magnet":
 				var shape = $Magnet/CollisionShape2D.get_shape()
-				shape.set_radius(750)
+				if level == 1:
+					shape.set_radius(750)
+				elif level == 2:
+					shape.set_radius(1500)
 			"targeting":
 				pass
 		
 			"storage":
-				MaxInventoryCount = 32
+				if level == 1:
+					MaxInventoryCount = 32
+				elif level == 2:
+					MaxInventoryCount = 64
 		#Notify the Level to increase MaxEnemies
 		
 			
@@ -316,6 +354,7 @@ func _on_InventoryFullNoise_finished():
 func _on_ShieldRechargeTimer_timeout():
 	if Shielded == true and Shields < MaxShields:
 		Shields += 100
-		print(self.name, " Shields == " , Shields)
+		$Shield.show()
+		#print(self.name, " Shields == " , Shields)
 	$Shield/ShieldRechargeTimer.start()
 		

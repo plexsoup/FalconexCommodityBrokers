@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://ships/ship.gd" type="Script" id=1]
 [ext_resource path="res://Camera2D.gd" type="Script" id=2]
@@ -17,7 +17,8 @@
 [ext_resource path="res://effects/inventoryFull.wav" type="AudioStream" id=15]
 [ext_resource path="res://effects/CoordinatesReceived.wav" type="AudioStream" id=16]
 [ext_resource path="res://effects/shields.png" type="Texture" id=17]
-[ext_resource path="res://effects/shields.wav" type="AudioStream" id=18]
+[ext_resource path="res://ships/Shield.gd" type="Script" id=18]
+[ext_resource path="res://effects/shields.wav" type="AudioStream" id=19]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 29.8351, 31.1695 )
@@ -25,8 +26,101 @@ extents = Vector2( 29.8351, 31.1695 )
 [sub_resource type="CircleShape2D" id=2]
 radius = 283.598
 
+[sub_resource type="Animation" id=5]
+resource_name = "shields0"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Shield:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, false ]
+}
+
 [sub_resource type="Animation" id=3]
-resource_name = "shields"
+resource_name = "shields1"
+length = 0.5
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("Shield/ShieldNoise:playing")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.05, 0.45 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, false ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Shield:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, true ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Shield:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.4, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0.439216, 0.854902, 0.34902, 0.247059 ), Color( 0.439216, 0.854902, 0.34902, 1 ), Color( 0.439216, 0.854902, 0.34902, 0.247059 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Shield:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0.05, 0.15, 0.25, 0.35, 0.45, 0.45 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0.25, 0.25 ), Vector2( 0.26, 0.18 ), Vector2( 0.25, 0.25 ), Vector2( 0.18, 0.26 ), Vector2( 0.25, 0.25 ), Vector2( 0.25, 0.25 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Shield:rotation_degrees")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0.05, 0.15, 0.35, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 3.0, -5.0, 0.0 ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("Shield/ShieldNoise:volume_db")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0.05 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ -18.0 ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "shields2"
 length = 0.5
 step = 0.05
 tracks/0/type = "value"
@@ -51,7 +145,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 0.05, 0.45, 0.5 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 1,
-"values": [ false, true, true, false ]
+"values": [ true, true, true, true ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("Shield:self_modulate")
@@ -63,7 +157,7 @@ tracks/2/keys = {
 "times": PoolRealArray( 0, 0.4, 0.5 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
-"values": [ Color( 0.439216, 0.854902, 0.34902, 0 ), Color( 0.439216, 0.854902, 0.34902, 1 ), Color( 0.439216, 0.854902, 0.34902, 0 ) ]
+"values": [ Color( 0.439216, 0.854902, 0.34902, 0.345098 ), Color( 0.439216, 0.854902, 0.34902, 1 ), Color( 0.439216, 0.854902, 0.34902, 0.345098 ) ]
 }
 tracks/3/type = "value"
 tracks/3/path = NodePath("Shield:scale")
@@ -75,7 +169,7 @@ tracks/3/keys = {
 "times": PoolRealArray( 0.05, 0.15, 0.25, 0.35, 0.45 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
 "update": 0,
-"values": [ Vector2( 0.3, 0.3 ), Vector2( 0.45, 0.5 ), Vector2( 0.5, 0.5 ), Vector2( 0.5, 0.58 ), Vector2( 0.3, 0.3 ) ]
+"values": [ Vector2( 0.4, 0.4 ), Vector2( 0.45, 0.5 ), Vector2( 0.5, 0.5 ), Vector2( 0.5, 0.58 ), Vector2( 0.4, 0.4 ) ]
 }
 tracks/4/type = "value"
 tracks/4/path = NodePath("Shield:rotation_degrees")
@@ -88,6 +182,18 @@ tracks/4/keys = {
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
 "update": 0,
 "values": [ 0.0, 3.0, -5.0, 0.0 ]
+}
+tracks/5/type = "value"
+tracks/5/path = NodePath("Shield/ShieldNoise:volume_db")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ -9.0 ]
 }
 
 [node name="Ship" type="RigidBody2D"]
@@ -131,9 +237,14 @@ Bullet = ExtResource( 6 )
 [node name="Muzzles" type="Node2D" parent="Weapons/MissileLaunchers"]
 
 [node name="Port" type="Position2D" parent="Weapons/MissileLaunchers/Muzzles"]
+visible = false
 position = Vector2( 232.53, -232.94 )
 
+[node name="Center" type="Position2D" parent="Weapons/MissileLaunchers/Muzzles"]
+position = Vector2( 359.86, 0.214844 )
+
 [node name="Starboard" type="Position2D" parent="Weapons/MissileLaunchers/Muzzles"]
+visible = false
 position = Vector2( 232.53, 232.94 )
 
 [node name="ReloadTimer" type="Timer" parent="Weapons/MissileLaunchers"]
@@ -145,7 +256,7 @@ stream = ExtResource( 7 )
 volume_db = -38.0
 
 [node name="DualLasers" type="Sprite" parent="Weapons"]
-scale = Vector2( 0.15, 0.1 )
+scale = Vector2( 0.15, 0.15 )
 texture = ExtResource( 8 )
 script = ExtResource( 5 )
 Bullet = ExtResource( 9 )
@@ -154,12 +265,22 @@ Delay = 0.01
 [node name="Muzzles" type="Node2D" parent="Weapons/DualLasers"]
 
 [node name="Port" type="Position2D" parent="Weapons/DualLasers/Muzzles"]
-position = Vector2( 300, -175 )
-rotation = 0.0349066
+position = Vector2( 285, -190 )
+rotation = 0.0174533
+
+[node name="Port2" type="Position2D" parent="Weapons/DualLasers/Muzzles"]
+visible = false
+position = Vector2( 282, -224 )
+rotation = -0.392699
 
 [node name="Starboard" type="Position2D" parent="Weapons/DualLasers/Muzzles"]
-position = Vector2( 300, 175 )
-rotation = -0.0349066
+position = Vector2( 285, 190 )
+rotation = -0.0174533
+
+[node name="Starboard2" type="Position2D" parent="Weapons/DualLasers/Muzzles"]
+visible = false
+position = Vector2( 282, 224 )
+rotation = 0.392699
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Weapons/DualLasers"]
 stream = ExtResource( 10 )
@@ -170,8 +291,10 @@ wait_time = 0.3
 one_shot = true
 
 [node name="thrust" type="Sprite" parent="."]
-position = Vector2( -92.0937, 0.554779 )
+self_modulate = Color( 1, 1, 1, 0.345098 )
+position = Vector2( -28.0605, 0.147163 )
 texture = ExtResource( 11 )
+offset = Vector2( -64.0332, 0.407616 )
 
 [node name="EngineNoise" type="AudioStreamPlayer" parent="thrust"]
 stream = ExtResource( 12 )
@@ -201,24 +324,34 @@ volume_db = -9.0
 
 [node name="Shield" type="Sprite" parent="."]
 visible = false
-self_modulate = Color( 0.439216, 0.854902, 0.34902, 0 )
-scale = Vector2( 0.3, 0.3 )
+self_modulate = Color( 0.439216, 0.854902, 0.34902, 0.247059 )
+position = Vector2( 1.74954, 1.83276 )
+scale = Vector2( 0.25, 0.25 )
 texture = ExtResource( 17 )
+offset = Vector2( -7.04675, -8.30855 )
+script = ExtResource( 18 )
 
 [node name="ShieldNoise" type="AudioStreamPlayer2D" parent="Shield"]
-stream = ExtResource( 18 )
-volume_db = -9.0
+stream = ExtResource( 19 )
+volume_db = -18.0
 
 [node name="ShieldTimer" type="Timer" parent="Shield"]
 wait_time = 0.4
+one_shot = true
 
 [node name="ShieldRechargeTimer" type="Timer" parent="Shield"]
 wait_time = 3.0
 one_shot = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/shields = SubResource( 3 )
+[node name="Tween" type="Tween" parent="Shield"]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Shield"]
+root_node = NodePath("../..")
+anims/shields0 = SubResource( 5 )
+anims/shields1 = SubResource( 3 )
+anims/shields2 = SubResource( 4 )
 
 [connection signal="timeout" from="Weapons/MissileLaunchers/ReloadTimer" to="Weapons/MissileLaunchers" method="_on_ReloadTimer_timeout"]
 [connection signal="finished" from="InventoryFullNoise" to="." method="_on_InventoryFullNoise_finished"]
+[connection signal="timeout" from="Shield/ShieldTimer" to="Shield" method="_on_ShieldTimer_timeout"]
 [connection signal="timeout" from="Shield/ShieldRechargeTimer" to="." method="_on_ShieldRechargeTimer_timeout"]

@@ -1,11 +1,12 @@
 """
 
 TODO:
-	- feb 28: 
-		- make inventory limit for player
-		- make enemies leave player alone if cargo is empty
-		- add upgrade options:
-			- lasers, missiles, shield, cargo hold, engines
+	- mar 1: 
+	
+		polish.
+		give enemy ai behaviour = shoot if shot at.
+		test html export
+		
 
 Notes regarding Design Decisions:
 	- Initially, players had to select the delivery destination manually.
@@ -34,6 +35,8 @@ Minimum Features Required
 
 
 Bugs to Fix
+	- tree freequently grabs input it shouldn't
+	
 	
 	- add a pause option
 	- html export has double-image

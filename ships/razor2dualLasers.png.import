@@ -3,6 +3,9 @@
 importer="texture"
 type="StreamTexture"
 path="res://.import/razor2dualLasers.png-7d81e3b7a9129b44b2882101a7fa7fa4.stex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 

@@ -2,7 +2,7 @@ extends HSplitContainer
 
 var PreviousOffset : float
 var DesiredOffset : float
-var OpenOffset : float = 130.0
+var OpenOffset : float = 145.0
 var ClosedOffset : float = 0.0
 var InitialOffset : float = 0.0
 
@@ -24,12 +24,23 @@ func slidePanel():
 	tween.start()
 	$SlideNoise.play()
 
+func openPanel():
+	$PanelContainer/ButtonMover/MarginContainer/UpgradeButtons.show()
+	PreviousOffset = get_split_offset()
+	DesiredOffset = OpenOffset
+	slidePanel()
+	
+func closePanel():
+	PreviousOffset = get_split_offset()
+	DesiredOffset = ClosedOffset
+	slidePanel()
+	var tween = get_node("Tween")
+	yield(tween, "tween_completed")
+	$PanelContainer/ButtonMover/MarginContainer/UpgradeButtons.hide()
+
+
 func _on_LeftButton_toggled(button_pressed):
 	if button_pressed == true:
-		PreviousOffset = get_split_offset()
-		DesiredOffset = OpenOffset
-		slidePanel()
+		openPanel()
 	else:
-		PreviousOffset = get_split_offset()
-		DesiredOffset = ClosedOffset
-		slidePanel()
+		closePanel()

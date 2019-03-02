@@ -77,9 +77,10 @@ func findPlanetByName(planetName):
 func _on_PlanetList_item_selected():
 	# doesn't work anymore, because we're not using indexes.
 	# change it to find planet by name
-	
 	var item = get_selected()
 	var objectName = item.get_text(0)
+	print(self.name, " planet selected: ", objectName)
+
 	var object = findPlanetByName(objectName)
 	if object != null:
 		connect("celestial_object_selected", global.getPlayerShip(), "_on_PlanetList_selected_object")

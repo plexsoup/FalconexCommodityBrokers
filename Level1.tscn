@@ -12,7 +12,7 @@
 [ext_resource path="res://InvDisplayLabel.gd" type="Script" id=10]
 [ext_resource path="res://icons/cog.png" type="Texture" id=11]
 [ext_resource path="res://icons/cut-diamond.png" type="Texture" id=12]
-[ext_resource path="res://icons/crown-coin.png" type="Texture" id=13]
+[ext_resource path="res://GUI/CashDisplayPanel.tscn" type="PackedScene" id=13]
 [ext_resource path="res://GravWell.gd" type="Script" id=14]
 
 [sub_resource type="CircleShape2D" id=1]
@@ -38,7 +38,7 @@ collision_layer = 8
 collision_mask = 0
 
 [node name="Sprite" type="Sprite" parent="galaxy/BlackHole"]
-position = Vector2( 1.24838, -2.9628 )
+position = Vector2( 1.24838, -2.77878 )
 scale = Vector2( 2, 2 )
 texture = ExtResource( 4 )
 offset = Vector2( 6.36433, 45.7419 )
@@ -52,18 +52,17 @@ shape = SubResource( 1 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="DialogBoxes" type="Control" parent="CanvasLayer"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-
 [node name="WarningPanel" type="PanelContainer" parent="CanvasLayer"]
 anchor_left = 0.5
 anchor_right = 0.5
-margin_left = -59.0
-margin_right = 111.0
-margin_bottom = 35.0
+margin_left = -85.0
+margin_top = 20.0
+margin_right = 85.0
+margin_bottom = 55.0
 script = ExtResource( 5 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="WarningLabel" type="Label" parent="CanvasLayer/WarningPanel"]
 margin_left = 7.0
@@ -76,12 +75,17 @@ text = "Alert: Inventory Full!"
 [node name="InventoryDisplayPanel" type="PanelContainer" parent="CanvasLayer"]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -226.0
-margin_bottom = 47.0
+margin_left = -264.0
+margin_top = 2.10529
+margin_right = -38.0
+margin_bottom = 49.1053
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource( 6 )
 script = ExtResource( 7 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="GridContainer" type="GridContainer" parent="CanvasLayer/InventoryDisplayPanel"]
 margin_left = 7.0
@@ -157,37 +161,7 @@ text = "5"
 script = ExtResource( 10 )
 CommodityType = "diamond"
 
-[node name="CashDisplayPanel" type="PanelContainer" parent="CanvasLayer"]
-margin_right = 14.0
-margin_bottom = 14.0
-script = ExtResource( 7 )
-
-[node name="GridContainer" type="GridContainer" parent="CanvasLayer/CashDisplayPanel"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 75.0
-margin_bottom = 40.0
-columns = 2
-
-[node name="CashIcon" type="TextureRect" parent="CanvasLayer/CashDisplayPanel/GridContainer"]
-margin_right = 32.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 32, 32 )
-texture = ExtResource( 13 )
-expand = true
-
-[node name="CashOnHand" type="Label" parent="CanvasLayer/CashDisplayPanel/GridContainer"]
-margin_left = 36.0
-margin_right = 68.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 32, 32 )
-size_flags_horizontal = 0
-size_flags_vertical = 0
-theme = ExtResource( 6 )
-custom_fonts/font = ExtResource( 9 )
-text = "5"
-script = ExtResource( 10 )
-CommodityType = "cash"
+[node name="CashDisplayPanel" parent="CanvasLayer" instance=ExtResource( 13 )]
 
 [node name="Bullets" type="Node2D" parent="."]
 

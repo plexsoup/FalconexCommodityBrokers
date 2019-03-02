@@ -3,6 +3,9 @@
 importer="texture"
 type="StreamTexture"
 path="res://.import/falcon-dualLasers.png-1dfadced35c083a5add7294b55e67f83.stex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 

@@ -1,21 +1,20 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
 [ext_resource path="res://PlayerController.gd" type="Script" id=2]
 [ext_resource path="res://LeftMarginSplit.gd" type="Script" id=3]
 [ext_resource path="res://effects/slide2.wav" type="AudioStream" id=4]
 [ext_resource path="res://ButtonMover.gd" type="Script" id=5]
-[ext_resource path="res://UpgradeButtons.gd" type="Script" id=6]
+[ext_resource path="res://GUI/CashDisplayPanel.tscn" type="PackedScene" id=6]
 [ext_resource path="res://styles/scifi_theme.tres" type="Theme" id=7]
 [ext_resource path="res://upgBtn.gd" type="Script" id=8]
 [ext_resource path="res://effects/insufficientFunds.wav" type="AudioStream" id=9]
 [ext_resource path="res://effects/upgradeComplete.wav" type="AudioStream" id=10]
 [ext_resource path="res://RightMarginSplit.gd" type="Script" id=11]
-[ext_resource path="res://Viewport.gd" type="Script" id=12]
-[ext_resource path="res://Level1.tscn" type="PackedScene" id=13]
-[ext_resource path="res://PanelContainer.gd" type="Script" id=14]
-[ext_resource path="res://GUI/PlayerInventory.tscn" type="PackedScene" id=15]
-[ext_resource path="res://PlanetList.gd" type="Script" id=16]
+[ext_resource path="res://PanelContainer.gd" type="Script" id=12]
+[ext_resource path="res://GUI/PlayerInventory.tscn" type="PackedScene" id=13]
+[ext_resource path="res://PlanetList.gd" type="Script" id=14]
+[ext_resource path="res://Level1.tscn" type="PackedScene" id=15]
 
 [node name="Main" type="Node"]
 script = ExtResource( 1 )
@@ -29,162 +28,196 @@ script = ExtResource( 2 )
 
 [node name="CurrentLevel" type="Node" parent="."]
 
-[node name="WindowTiler" type="Control" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="WindowTiler" type="Control" parent="CanvasLayer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="LeftMarginSplit" type="HSplitContainer" parent="WindowTiler"]
+[node name="LeftMarginSplit" type="HSplitContainer" parent="CanvasLayer/WindowTiler"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 3 )
 
-[node name="SlideNoise" type="AudioStreamPlayer" parent="WindowTiler/LeftMarginSplit"]
+[node name="SlideNoise" type="AudioStreamPlayer" parent="CanvasLayer/WindowTiler/LeftMarginSplit"]
 stream = ExtResource( 4 )
 volume_db = -22.0
 
-[node name="Tween" type="Tween" parent="WindowTiler/LeftMarginSplit"]
+[node name="Tween" type="Tween" parent="CanvasLayer/WindowTiler/LeftMarginSplit"]
 
-[node name="PanelContainer" type="PanelContainer" parent="WindowTiler/LeftMarginSplit"]
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/WindowTiler/LeftMarginSplit"]
 margin_right = 14.0
 margin_bottom = 600.0
 
-[node name="ButtonMover" type="Node2D" parent="WindowTiler/LeftMarginSplit/PanelContainer"]
-position = Vector2( -128.704, 0 )
+[node name="ButtonMover" type="Node2D" parent="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer"]
+position = Vector2( -141.736, 0 )
 script = ExtResource( 5 )
+__meta__ = {
+"_edit_group_": true
+}
 
-[node name="MarginContainer" type="MarginContainer" parent="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover"]
-margin_left = 10.0
-margin_top = 10.0
-margin_right = 10.0
-margin_bottom = 10.0
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover"]
+margin_left = 7.29251
+margin_top = 118.3
+margin_right = 125.293
+margin_bottom = 331.3
+__meta__ = {
+"_edit_group_": true
+}
 
-[node name="UpgradeButtons" type="GridContainer" parent="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer"]
-margin_right = 118.0
-margin_bottom = 213.0
+[node name="UpgradeButtons" type="GridContainer" parent="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer"]
+margin_right = 130.0
+margin_bottom = 272.0
 size_flags_horizontal = 2
 size_flags_vertical = 0
-script = ExtResource( 6 )
+custom_constants/vseparation = 6
 
-[node name="Label" type="Label" parent="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
-margin_right = 118.0
-margin_bottom = 21.0
+[node name="CashDisplayPanel" parent="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons" instance=ExtResource( 6 )]
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 130.0
+margin_bottom = 47.0
+
+[node name="Label" type="Label" parent="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
+margin_top = 53.0
+margin_right = 130.0
+margin_bottom = 74.0
 theme = ExtResource( 7 )
 text = "Ship Upgrades"
 
-[node name="upgLaserBtn" type="Button" parent="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
-margin_top = 25.0
-margin_right = 118.0
-margin_bottom = 45.0
+[node name="upgLaserBtn" type="Button" parent="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
+margin_top = 80.0
+margin_right = 130.0
+margin_bottom = 107.0
 size_flags_horizontal = 7
 size_flags_vertical = 0
-text = "Lasers $1000"
+theme = ExtResource( 7 )
+text = "Lasers: $1000"
 script = ExtResource( 8 )
+UpgradeName = "lasers"
+MaxUpgrades = 2
 
-[node name="upgEnginesBtn" type="Button" parent="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
-margin_top = 49.0
-margin_right = 118.0
-margin_bottom = 69.0
+[node name="upgEnginesBtn" type="Button" parent="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
+margin_top = 113.0
+margin_right = 130.0
+margin_bottom = 140.0
 size_flags_horizontal = 7
+theme = ExtResource( 7 )
 text = "Engines: $1000"
+script = ExtResource( 8 )
+UpgradeName = "engines"
 
-[node name="upgShieldsBtn" type="Button" parent="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
-margin_top = 73.0
-margin_right = 118.0
-margin_bottom = 93.0
+[node name="upgShieldsBtn" type="Button" parent="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
+margin_top = 146.0
+margin_right = 130.0
+margin_bottom = 173.0
 size_flags_horizontal = 7
+theme = ExtResource( 7 )
 text = "Shields: $1000"
+script = ExtResource( 8 )
+UpgradeName = "shields"
+MaxUpgrades = 2
 
-[node name="upgMissilesBtn" type="Button" parent="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
-margin_top = 97.0
-margin_right = 118.0
-margin_bottom = 117.0
+[node name="upgMissilesBtn" type="Button" parent="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
+margin_top = 179.0
+margin_right = 130.0
+margin_bottom = 206.0
 size_flags_horizontal = 7
+theme = ExtResource( 7 )
 text = "Missiles: $1000"
+script = ExtResource( 8 )
+UpgradeName = "missiles"
+MaxUpgrades = 2
 
-[node name="upgMagnetBtn" type="Button" parent="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
-margin_top = 121.0
-margin_right = 118.0
-margin_bottom = 141.0
+[node name="upgMagnetBtn" type="Button" parent="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
+margin_top = 212.0
+margin_right = 130.0
+margin_bottom = 239.0
 size_flags_horizontal = 7
+theme = ExtResource( 7 )
 text = "Magnet: $1000"
+script = ExtResource( 8 )
+UpgradeName = "magnet"
+MaxUpgrades = 2
 
-[node name="upgTargetingBtn" type="Button" parent="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
-margin_top = 145.0
+[node name="upgTargetingBtn" type="Button" parent="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
+visible = false
+margin_top = 157.0
 margin_right = 118.0
-margin_bottom = 165.0
+margin_bottom = 177.0
 size_flags_horizontal = 7
 text = "Targeting: $1000"
+script = ExtResource( 8 )
+UpgradeName = "targeting"
 
-[node name="upgMinesBtn" type="Button" parent="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
-margin_top = 169.0
-margin_right = 118.0
-margin_bottom = 189.0
+[node name="upgMinesBtn" type="Button" parent="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
+visible = false
+margin_top = 157.0
+margin_right = 114.0
+margin_bottom = 177.0
 size_flags_horizontal = 7
 text = "Mines: $1000"
+script = ExtResource( 8 )
+UpgradeName = "mines"
 
-[node name="upgCargoBtn" type="Button" parent="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
-margin_top = 193.0
-margin_right = 118.0
-margin_bottom = 213.0
+[node name="upgCargoBtn" type="Button" parent="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
+margin_top = 245.0
+margin_right = 130.0
+margin_bottom = 272.0
 size_flags_horizontal = 7
+theme = ExtResource( 7 )
 text = "Storage: $1000"
+script = ExtResource( 8 )
+UpgradeName = "storage"
+MaxUpgrades = 2
 
-[node name="InsufficientFunds" type="AudioStreamPlayer" parent="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
+[node name="InsufficientFunds" type="AudioStreamPlayer" parent="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
 stream = ExtResource( 9 )
 volume_db = -9.25
 
-[node name="UpgradeComplete" type="AudioStreamPlayer" parent="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
+[node name="UpgradeComplete" type="AudioStreamPlayer" parent="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons"]
 stream = ExtResource( 10 )
 volume_db = -9.0
 
-[node name="RightMarginSplit" type="HSplitContainer" parent="WindowTiler/LeftMarginSplit"]
+[node name="RightMarginSplit" type="HSplitContainer" parent="CanvasLayer/WindowTiler/LeftMarginSplit"]
 margin_left = 26.0
 margin_right = 1024.0
 margin_bottom = 600.0
 script = ExtResource( 11 )
 
-[node name="Tween" type="Tween" parent="WindowTiler/LeftMarginSplit/RightMarginSplit"]
+[node name="Tween" type="Tween" parent="CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit"]
 
-[node name="SlideNoise" type="AudioStreamPlayer" parent="WindowTiler/LeftMarginSplit/RightMarginSplit"]
+[node name="SlideNoise" type="AudioStreamPlayer" parent="CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit"]
 stream = ExtResource( 4 )
 volume_db = -22.0
 
-[node name="ViewportContainer" type="ViewportContainer" parent="WindowTiler/LeftMarginSplit/RightMarginSplit"]
+[node name="spacer-forMainScene" type="CenterContainer" parent="CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit"]
 margin_right = 971.0
 margin_bottom = 600.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-stretch = true
 
-[node name="Viewport" type="Viewport" parent="WindowTiler/LeftMarginSplit/RightMarginSplit/ViewportContainer"]
-size = Vector2( 971, 600 )
-handle_input_locally = false
-render_target_update_mode = 3
-audio_listener_enable_2d = true
-script = ExtResource( 12 )
-
-[node name="Level1" parent="WindowTiler/LeftMarginSplit/RightMarginSplit/ViewportContainer/Viewport" instance=ExtResource( 13 )]
-
-[node name="Node2D" type="Node2D" parent="WindowTiler/LeftMarginSplit/RightMarginSplit"]
+[node name="Node2D" type="Node2D" parent="CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit"]
 position = Vector2( 0, 220 )
 
-[node name="LeftButton" type="Button" parent="WindowTiler/LeftMarginSplit/RightMarginSplit/Node2D"]
+[node name="LeftButton" type="Button" parent="CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit/Node2D"]
 margin_right = 33.0
 margin_bottom = 33.0
 toggle_mode = true
 text = "|||"
 
-[node name="PanelContainer" type="PanelContainer" parent="WindowTiler/LeftMarginSplit/RightMarginSplit"]
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit"]
 margin_left = 983.0
 margin_right = 998.0
 margin_bottom = 600.0
-script = ExtResource( 14 )
+script = ExtResource( 12 )
 
-[node name="Node2D" type="Node2D" parent="WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer"]
+[node name="Node2D" type="Node2D" parent="CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer"]
 
-[node name="Button" type="Button" parent="WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer/Node2D"]
+[node name="Button" type="Button" parent="CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer/Node2D"]
 margin_left = -39.0
 margin_top = 220.0
 margin_right = -6.0
@@ -192,15 +225,15 @@ margin_bottom = 253.0
 toggle_mode = true
 text = "|||"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 8.0
 margin_bottom = 593.0
 
-[node name="PlayerInventory" parent="WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer/VBoxContainer" instance=ExtResource( 15 )]
+[node name="PlayerInventory" parent="CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer/VBoxContainer" instance=ExtResource( 13 )]
 
-[node name="PlanetList" type="Tree" parent="WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer/VBoxContainer"]
+[node name="PlanetList" type="Tree" parent="CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer/VBoxContainer"]
 margin_top = 54.0
 margin_right = 1.0
 margin_bottom = 586.0
@@ -212,19 +245,16 @@ size_flags_vertical = 3
 columns = 6
 hide_root = true
 select_mode = 1
-script = ExtResource( 16 )
+script = ExtResource( 14 )
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="Levels" type="Node2D" parent="."]
 
-[connection signal="pressed" from="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons/upgLaserBtn" to="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons" method="_on_upgLaserBtn_pressed"]
-[connection signal="pressed" from="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons/upgEnginesBtn" to="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons" method="_on_upgEnginesBtn_pressed"]
-[connection signal="pressed" from="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons/upgShieldsBtn" to="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons" method="_on_upgShieldsBtn_pressed"]
-[connection signal="pressed" from="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons/upgMissilesBtn" to="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons" method="_on_upgMissilesBtn_pressed"]
-[connection signal="pressed" from="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons/upgMagnetBtn" to="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons" method="_on_upgMagnetBtn_pressed"]
-[connection signal="pressed" from="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons/upgTargetingBtn" to="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons" method="_on_upgTargetingBtn_pressed"]
-[connection signal="pressed" from="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons/upgMinesBtn" to="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons" method="_on_upgMinesBtn_pressed"]
-[connection signal="pressed" from="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons/upgCargoBtn" to="WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons" method="_on_upgCargoBtn_pressed"]
-[connection signal="toggled" from="WindowTiler/LeftMarginSplit/RightMarginSplit/Node2D/LeftButton" to="WindowTiler/LeftMarginSplit" method="_on_LeftButton_toggled"]
-[connection signal="toggled" from="WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer/Node2D/Button" to="WindowTiler/LeftMarginSplit/RightMarginSplit" method="_on_Button_toggled"]
-[connection signal="item_selected" from="WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer/VBoxContainer/PlanetList" to="WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer/VBoxContainer/PlanetList" method="_on_PlanetList_item_selected"]
-[connection signal="nothing_selected" from="WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer/VBoxContainer/PlanetList" to="WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer/VBoxContainer/PlanetList" method="_on_PlanetList_nothing_selected"]
+[node name="Level1" parent="Levels" instance=ExtResource( 15 )]
+
+[connection signal="pressed" from="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons/upgLaserBtn" to="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons/upgLaserBtn" method="_on_Btn_pressed"]
+[connection signal="pressed" from="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons/upgEnginesBtn" to="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons/upgEnginesBtn" method="_on_Btn_pressed"]
+[connection signal="pressed" from="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons/upgShieldsBtn" to="CanvasLayer/WindowTiler/LeftMarginSplit/PanelContainer/ButtonMover/MarginContainer/UpgradeButtons/upgShieldsBtn" method="_on_Btn_pressed"]
+[connection signal="toggled" from="CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit/Node2D/LeftButton" to="CanvasLayer/WindowTiler/LeftMarginSplit" method="_on_LeftButton_toggled"]
+[connection signal="toggled" from="CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer/Node2D/Button" to="CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit" method="_on_Button_toggled"]
+[connection signal="item_selected" from="CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer/VBoxContainer/PlanetList" to="CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer/VBoxContainer/PlanetList" method="_on_PlanetList_item_selected"]
+[connection signal="nothing_selected" from="CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer/VBoxContainer/PlanetList" to="CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit/PanelContainer/VBoxContainer/PlanetList" method="_on_PlanetList_nothing_selected"]

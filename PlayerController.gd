@@ -36,22 +36,22 @@ func subscribe(keyStr, nodeRequesting):
 
 func _process(delta):
 
-	if Input.is_action_just_pressed("ui_left"):
+	if Input.is_action_just_pressed("turnLeft"):
 		emit_signal("left_pressed")
-	if Input.is_action_just_pressed("ui_right"):
+	if Input.is_action_just_pressed("turnRight"):
 		emit_signal("right_pressed")
-	if Input.is_action_just_pressed("ui_up"):
+	if Input.is_action_just_pressed("applyThrust"):
 		emit_signal("up_pressed")
-	if Input.is_action_just_pressed("ui_down"):
+	if Input.is_action_just_pressed("Brake"):
 		emit_signal("down_pressed")
 
-	if Input.is_action_just_released("ui_left"):
+	if Input.is_action_just_released("turnLeft"):
 		emit_signal("left_released")
-	if Input.is_action_just_released("ui_right"):
+	if Input.is_action_just_released("turnRight"):
 		emit_signal("right_released")
-	if Input.is_action_just_released("ui_up"):
+	if Input.is_action_just_released("applyThrust"):
 		emit_signal("up_released")
-	if Input.is_action_just_released("ui_down"):
+	if Input.is_action_just_released("Brake"):
 		emit_signal("down_released")
 		
 		

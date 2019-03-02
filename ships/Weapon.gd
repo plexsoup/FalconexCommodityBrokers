@@ -23,12 +23,13 @@ func _ready():
 func fireAllGuns():
 	
 	for muzzle in $Muzzles.get_children():
-		fireBullet(muzzle )
+		if muzzle.is_visible():
+			fireBullet(muzzle )
 	$ReloadTimer.start()
 
 func fireBullet(muzzle):
 	#print(self.name, " MyShip linear_velocity == ", MyShip.get_linear_velocity())
-	var rot = muzzle.get_global_rotation() + randf()*0.035 - 0.0175
+	var rot = muzzle.get_global_rotation() + randf()*0.14 - 0.07
 	emit_signal("bullet_requested", muzzle.get_global_position(), rot, MyShip.get_linear_velocity(), Bullet)
 	
 #	var newBullet = Bullet.instance()

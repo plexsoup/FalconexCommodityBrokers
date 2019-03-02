@@ -16,7 +16,9 @@ func _ready():
 func start(myPlanet, myStar, orbitalDistance):
 	MyPlanet = myPlanet
 	MyStar = myStar
-	#initializeSpring(orbitalDistance)
+	
+	# WTF? This next line was commented out. how was it working?
+	initializeSpring(orbitalDistance)
 
 func initializeSpring(orbitalDistance):
 	set_node_a(get_path_to(MyPlanet))
@@ -25,10 +27,10 @@ func initializeSpring(orbitalDistance):
 	set_rest_length(orbitalDistance)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	update()
+#func _process(delta):
+	#update()
 
-func _draw():
-	draw_circle(Vector2(0, 0), 25, Color.blue)
-	draw_line(to_local(get_node(get_node_a()).get_global_position()), to_local(get_node(get_node_b()).get_global_position()), Color.antiquewhite, 10)
+#func _draw():
+#	draw_circle(Vector2(0, 0), 25, Color.blue)
+#	draw_line(to_local(get_node(get_node_a()).get_global_position()), to_local(get_node(get_node_b()).get_global_position()), Color.antiquewhite, 10)
 

@@ -137,10 +137,12 @@ scale = Vector2( 4, 4 )
 
 [node name="Position2D" type="Position2D" parent="weapons/Dual Lasers/Muzzles"]
 position = Vector2( 92.7875, -67.6682 )
+rotation = 0.0261799
 scale = Vector2( 0.25, 0.25 )
 
 [node name="Position2D2" type="Position2D" parent="weapons/Dual Lasers/Muzzles"]
 position = Vector2( 92.7875, 66.643 )
+rotation = -0.0261799
 scale = Vector2( 0.25, 0.25 )
 
 [node name="ShootCycleTimer" type="Timer" parent="weapons/Dual Lasers"]

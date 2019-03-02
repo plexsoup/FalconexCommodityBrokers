@@ -36,3 +36,7 @@ func _process(delta):
 	NextPos = CurrentPos + get_global_position() + Velocity * delta  + Vector2(0, 12 * sin(TimeElapsed*WaveFreq)).rotated(BaseRot)
 	set_global_position( CurrentPos )
 #	look_at(NextPos)
+
+
+func _on_DurationTimer_timeout():
+	queue_free()

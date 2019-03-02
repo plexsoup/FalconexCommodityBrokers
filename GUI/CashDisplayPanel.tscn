@@ -1,0 +1,45 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://InventoryDisplayPanel.gd" type="Script" id=1]
+[ext_resource path="res://icons/crown-coin.png" type="Texture" id=2]
+[ext_resource path="res://styles/scifi_theme.tres" type="Theme" id=3]
+[ext_resource path="res://styles/fonts/Righteous26.tres" type="DynamicFont" id=4]
+[ext_resource path="res://InvDisplayLabel.gd" type="Script" id=5]
+
+[node name="CashDisplayPanel" type="PanelContainer"]
+margin_left = 30.0
+margin_top = 2.10529
+margin_right = 112.0
+margin_bottom = 49.1053
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="GridContainer" type="GridContainer" parent="."]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 75.0
+margin_bottom = 40.0
+columns = 2
+
+[node name="CashIcon" type="TextureRect" parent="GridContainer"]
+margin_right = 32.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 32, 32 )
+texture = ExtResource( 2 )
+expand = true
+
+[node name="CashOnHand" type="Label" parent="GridContainer"]
+margin_left = 36.0
+margin_right = 68.0
+margin_bottom = 33.0
+rect_min_size = Vector2( 32, 32 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = ExtResource( 3 )
+custom_fonts/font = ExtResource( 4 )
+text = "5"
+script = ExtResource( 5 )
+CommodityType = "cash"
+

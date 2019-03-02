@@ -11,7 +11,7 @@ enum STATES {
 var CurrentState = STATES.frozen
 
 signal started()
-
+signal dialog_box_requested(boxName, textArr, requestedBy)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -46,7 +46,7 @@ Once your path is highlighted, proceed to that planet to sell your goods.""",
 	]
 
 	CurrentState = STATES.frozen
-	spawnDialogBox(textArr)
+	spawnDialogBox("intro", textArr)
 
 func getState():
 	return CurrentState
@@ -57,11 +57,17 @@ func spawnPlayerShip():
 	ShipContainer.add_child(newPlayerShip)
 	global.setPlayerShip(newPlayerShip)
 	
-func spawnDialogBox(textArr):
-	var dialogBox = preload("res://DialogBox.tscn")
-	var newDialogBox = dialogBox.instance()
-	$CanvasLayer/DialogBoxes.add_child(newDialogBox)
-	newDialogBox.start(textArr, self)
+func spawnDialogBox(boxName, textArr):
+	connect("dialog_box_requested", global.getMain(), "_on_dialog_box_requested")
+	emit_signal("dialog_box_requested", boxName, textArr, self)
+	disconnect("dialog_box_requested", global.getMain(), "_on_dialog_box_requested")
+	
+#	var dialogBox = preload("res://DialogBox.tscn")
+#	var newDialogBox = dialogBox.instance()
+#	$"../CanvasLayer"/DialogBoxes.add_child(newDialogBox)
+#	newDialogBox.start(textArr, self)
+
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
@@ -128,9 +134,10 @@ func _on_ship_cash_popup_requested(pos, amount):
 	#print(self.name, " received signal _on_ship_cash_popup_requested ", pos, " " , amount)
 	call_deferred("spawnCashPopup", pos, amount)
 
-func _on_DialogBox_completed():
-	spawnPlayerShip()
-	startGame()
+func _on_DialogBox_completed(boxName):
+	if boxName == "intro":
+		spawnPlayerShip()
+		startGame()
 
 
 func _on_EnemySpawnTimer_timeout():
