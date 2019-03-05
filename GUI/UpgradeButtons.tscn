@@ -1,0 +1,130 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://GUI/CashDisplayPanel.tscn" type="PackedScene" id=1]
+[ext_resource path="res://InventoryDisplayPanel.gd" type="Script" id=2]
+[ext_resource path="res://styles/scifi_theme.tres" type="Theme" id=3]
+[ext_resource path="res://styles/fonts/Righteous26.tres" type="DynamicFont" id=4]
+[ext_resource path="res://upgBtn.gd" type="Script" id=5]
+[ext_resource path="res://effects/insufficientFunds.wav" type="AudioStream" id=6]
+[ext_resource path="res://effects/upgradeComplete.wav" type="AudioStream" id=7]
+
+[node name="UpgradeButtons" type="GridContainer"]
+margin_right = 130.0
+margin_bottom = 267.0
+size_flags_horizontal = 2
+size_flags_vertical = 0
+custom_constants/vseparation = 12
+
+[node name="CashDisplayPanel" type="PanelContainer" parent="." instance=ExtResource( 1 )]
+visible = false
+margin_right = 130.0
+margin_bottom = 47.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Label" type="Label" parent="."]
+margin_right = 130.0
+margin_bottom = 33.0
+theme = ExtResource( 3 )
+custom_fonts/font = ExtResource( 4 )
+text = "Upgrades"
+
+[node name="upgLaserBtn" type="Button" parent="."]
+margin_top = 45.0
+margin_right = 130.0
+margin_bottom = 72.0
+size_flags_horizontal = 7
+size_flags_vertical = 0
+theme = ExtResource( 3 )
+text = "Lasers: $1000"
+script = ExtResource( 5 )
+UpgradeName = "lasers"
+MaxUpgrades = 2
+
+[node name="upgEnginesBtn" type="Button" parent="."]
+margin_top = 84.0
+margin_right = 130.0
+margin_bottom = 111.0
+size_flags_horizontal = 7
+theme = ExtResource( 3 )
+text = "Engines: $1000"
+script = ExtResource( 5 )
+UpgradeName = "engines"
+
+[node name="upgShieldsBtn" type="Button" parent="."]
+margin_top = 123.0
+margin_right = 130.0
+margin_bottom = 150.0
+size_flags_horizontal = 7
+theme = ExtResource( 3 )
+text = "Shields: $1000"
+script = ExtResource( 5 )
+UpgradeName = "shields"
+MaxUpgrades = 2
+
+[node name="upgMissilesBtn" type="Button" parent="."]
+margin_top = 162.0
+margin_right = 130.0
+margin_bottom = 189.0
+size_flags_horizontal = 7
+theme = ExtResource( 3 )
+text = "Missiles: $1000"
+script = ExtResource( 5 )
+UpgradeName = "missiles"
+MaxUpgrades = 2
+
+[node name="upgMagnetBtn" type="Button" parent="."]
+margin_top = 201.0
+margin_right = 130.0
+margin_bottom = 228.0
+size_flags_horizontal = 7
+theme = ExtResource( 3 )
+text = "Magnet: $1000"
+script = ExtResource( 5 )
+UpgradeName = "magnet"
+MaxUpgrades = 2
+
+[node name="upgTargetingBtn" type="Button" parent="."]
+visible = false
+margin_top = 157.0
+margin_right = 118.0
+margin_bottom = 177.0
+size_flags_horizontal = 7
+text = "Targeting: $1000"
+script = ExtResource( 5 )
+UpgradeName = "targeting"
+
+[node name="upgMinesBtn" type="Button" parent="."]
+visible = false
+margin_top = 157.0
+margin_right = 114.0
+margin_bottom = 177.0
+size_flags_horizontal = 7
+text = "Mines: $1000"
+script = ExtResource( 5 )
+UpgradeName = "mines"
+
+[node name="upgCargoBtn" type="Button" parent="."]
+margin_top = 240.0
+margin_right = 130.0
+margin_bottom = 267.0
+size_flags_horizontal = 7
+theme = ExtResource( 3 )
+text = "Storage: $1000"
+script = ExtResource( 5 )
+UpgradeName = "storage"
+MaxUpgrades = 2
+
+[node name="InsufficientFunds" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+volume_db = -9.25
+
+[node name="UpgradeComplete" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+volume_db = -9.0
+
+[connection signal="pressed" from="upgLaserBtn" to="upgLaserBtn" method="_on_Btn_pressed"]
+[connection signal="pressed" from="upgEnginesBtn" to="upgEnginesBtn" method="_on_Btn_pressed"]
+[connection signal="pressed" from="upgShieldsBtn" to="upgShieldsBtn" method="_on_Btn_pressed"]

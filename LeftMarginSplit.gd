@@ -44,3 +44,4 @@ func _on_LeftButton_toggled(button_pressed):
 		openPanel()
 	else:
 		closePanel()
+		

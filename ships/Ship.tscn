@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://ships/ship.gd" type="Script" id=1]
 [ext_resource path="res://Camera2D.gd" type="Script" id=2]
@@ -19,6 +19,7 @@
 [ext_resource path="res://effects/shields.png" type="Texture" id=17]
 [ext_resource path="res://ships/Shield.gd" type="Script" id=18]
 [ext_resource path="res://effects/shields.wav" type="AudioStream" id=19]
+[ext_resource path="res://ships/CompassTaget.gd" type="Script" id=20]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 29.8351, 31.1695 )
@@ -26,7 +27,7 @@ extents = Vector2( 29.8351, 31.1695 )
 [sub_resource type="CircleShape2D" id=2]
 radius = 283.598
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=3]
 resource_name = "shields0"
 length = 0.1
 tracks/0/type = "value"
@@ -42,8 +43,7 @@ tracks/0/keys = {
 "values": [ false, false ]
 }
 
-[sub_resource type="Animation" id=3]
-resource_name = "shields1"
+[sub_resource type="Animation" id=4]
 length = 0.5
 step = 0.05
 tracks/0/type = "value"
@@ -119,8 +119,7 @@ tracks/5/keys = {
 "values": [ -18.0 ]
 }
 
-[sub_resource type="Animation" id=4]
-resource_name = "shields2"
+[sub_resource type="Animation" id=5]
 length = 0.5
 step = 0.05
 tracks/0/type = "value"
@@ -203,10 +202,10 @@ contact_monitor = true
 linear_damp = 0.1
 angular_damp = 5.0
 script = ExtResource( 1 )
-MaxThrust = 3500.0
+MaxThrust = 1500.0
 ThrustIncrement = 800.0
-SpinThrust = 25000.0
-MaxSpeed = 5500.0
+SpinThrust = 18000.0
+MaxSpeed = 2500.0
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
@@ -254,6 +253,7 @@ one_shot = true
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Weapons/MissileLaunchers"]
 stream = ExtResource( 7 )
 volume_db = -38.0
+bus = "SoundFX"
 
 [node name="DualLasers" type="Sprite" parent="Weapons"]
 scale = Vector2( 0.15, 0.15 )
@@ -285,6 +285,7 @@ rotation = 0.392699
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Weapons/DualLasers"]
 stream = ExtResource( 10 )
 volume_db = -40.0
+bus = "SoundFX"
 
 [node name="ReloadTimer" type="Timer" parent="Weapons/DualLasers"]
 wait_time = 0.3
@@ -299,6 +300,7 @@ offset = Vector2( -64.0332, 0.407616 )
 [node name="EngineNoise" type="AudioStreamPlayer" parent="thrust"]
 stream = ExtResource( 12 )
 volume_db = -29.62
+bus = "SoundFX"
 
 [node name="Magnet" type="Area2D" parent="."]
 collision_mask = 16
@@ -313,14 +315,17 @@ shape = SubResource( 2 )
 [node name="CrashNoise" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 14 )
 volume_db = -23.347
+bus = "SoundFX"
 
 [node name="InventoryFullNoise" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 15 )
 volume_db = -9.0
+bus = "Voiceover"
 
 [node name="CoordinatesReceivedNoise" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 16 )
 volume_db = -9.0
+bus = "Voiceover"
 
 [node name="Shield" type="Sprite" parent="."]
 visible = false
@@ -334,6 +339,7 @@ script = ExtResource( 18 )
 [node name="ShieldNoise" type="AudioStreamPlayer2D" parent="Shield"]
 stream = ExtResource( 19 )
 volume_db = -18.0
+bus = "SoundFX"
 
 [node name="ShieldTimer" type="Timer" parent="Shield"]
 wait_time = 0.4
@@ -347,9 +353,20 @@ one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Shield"]
 root_node = NodePath("../..")
-anims/shields0 = SubResource( 5 )
-anims/shields1 = SubResource( 3 )
-anims/shields2 = SubResource( 4 )
+anims/shields0 = SubResource( 3 )
+anims/shields1 = SubResource( 4 )
+anims/shields2 = SubResource( 5 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="CompassTarget" type="Label" parent="CanvasLayer"]
+visible = false
+margin_left = 169.275
+margin_top = 48.8721
+margin_right = 209.275
+margin_bottom = 73.8721
+text = "target"
+script = ExtResource( 20 )
 
 [connection signal="timeout" from="Weapons/MissileLaunchers/ReloadTimer" to="Weapons/MissileLaunchers" method="_on_ReloadTimer_timeout"]
 [connection signal="finished" from="InventoryFullNoise" to="." method="_on_InventoryFullNoise_finished"]

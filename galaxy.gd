@@ -24,7 +24,7 @@ func spawnStars(numStars):
 		var dist = 4400 + randi()%3600
 		
 		newStar.start(self, dist, direction)
-	spawnBackgroundStars(150)
+	spawnBackgroundStars(550)
 
 func spawnBackgroundStars(numStars):
 	var BGStarScene = load("res://planets/BGStars.tscn")

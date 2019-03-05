@@ -12,6 +12,7 @@ var CurrentState = STATES.frozen
 
 signal started()
 signal dialog_box_requested(boxName, textArr, requestedBy)
+signal pause_requested()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -21,27 +22,28 @@ func _ready():
 	
 	var textArr = [
 	"""[b]FalconEx[/b]
-\t[i]Galactic Commodities Brokers[/i]
-\t\t'Your first choice in delivery excellence!'
+		[i]Galactic Commodities Brokers[/i]
+			'Your first choice in delivery excellence!'
 
-When you need goods delivered fast, consider FalconEx.
-Our pilots are military-trained, so pirates pose no problem.""",
+	When you need goods delivered fast, consider FalconEx.
+	Our pilots are military-trained, so pirates pose no problem.""",
 
 """[i]Welcome new Pilot[/i]
-Pickup goods by bumping into planets. 
 
-When your cargo hold is full, the nav-system will provide a delivery destination.
-If you prefer, you can use the sidebar [|||] to choose your own buyer.
+	Pickup goods by bumping into planets. 
 
-Once your path is highlighted, proceed to that planet to sell your goods.""",
+	When your cargo hold is full, the nav-system will provide a delivery destination.
+	If you prefer, you can use the sidebar [|||] to choose your own buyer.
+
+	Once your path is highlighted, proceed to that planet to sell your goods.""",
 
 """[i]Commencing Military Training...[/i]
 
-\tUse WASD to fly and Space to Shoot.
-\tMouse Wheel to zoom your view.
-\tClick the [|||] button to open a sidebar.
-\tUse the mouse to select a buyer from the right sidebar.
-\tUse your cash to buy upgrades from the left sidebar.""",
+		Use WASD to fly and Space to Shoot.
+		Mouse Wheel to zoom your view.
+		Click the [|||] button to open a sidebar.
+		Use the mouse to select a buyer from the right sidebar.
+		Use your cash to buy upgrades from the left sidebar.""",
 		
 	]
 
@@ -50,7 +52,16 @@ Once your path is highlighted, proceed to that planet to sell your goods.""",
 
 func getState():
 	return CurrentState
-	
+
+func _input(event):
+	if Input.is_action_just_pressed("pause") and getState() == STATES.playing:
+		connect("pause_requested", global.getMain(), "_on_Level_pause_requested")
+		emit_signal("pause_requested") 
+		# **** convuluted signalling
+		# Main.gd relays signal to pausePanel.gd which then tells global
+		disconnect("pause_requested", global.getMain(), "_on_Level_pause_requested")
+		
+
 func spawnPlayerShip():
 	var playerShipScene = load("res://ships/Ship.tscn")
 	var newPlayerShip = playerShipScene.instance()

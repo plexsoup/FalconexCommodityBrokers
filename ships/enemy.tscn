@@ -160,6 +160,7 @@ texture = ExtResource( 6 )
 [node name="ShieldNoise" type="AudioStreamPlayer2D" parent="Shield"]
 stream = ExtResource( 7 )
 volume_db = -12.0
+bus = "SoundFX"
 
 [node name="ShieldTimer" type="Timer" parent="Shield"]
 wait_time = 0.4
@@ -174,6 +175,7 @@ region_rect = Rect2( 27, 203, 150, 175 )
 
 [node name="ExplosionNoise" type="AudioStreamPlayer2D" parent="Explosion"]
 stream = ExtResource( 9 )
+bus = "SoundFX"
 
 [node name="DestructionTimer" type="Timer" parent="Explosion"]
 one_shot = true

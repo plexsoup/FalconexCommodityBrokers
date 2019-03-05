@@ -38,6 +38,7 @@ var Shielded : bool = false
 var MaxShields : int = 0
 var Shields : int = 0
 var ShieldAnimation : String = "shields0"
+var SideBarDemoCompleted : bool = false
 
 signal sell(commodityName, quantity)
 signal buy(shipObj)
@@ -45,6 +46,8 @@ signal cash_popup_requested(pos, amount)
 signal picked_up_commodity()
 signal filled_inventory()
 signal lost_item(pos, commodityType)
+signal shopping_requested()
+
 
 func _ready():
 	start() # why isn't Level calling Start?
@@ -60,6 +63,9 @@ func start():
 	connect("cash_popup_requested", global.getCurrentLevel(), "_on_ship_cash_popup_requested")
 
 func get_input():
+	if global.getState() == global.STATES.paused:
+		return
+	
 	if Input.is_action_pressed("applyThrust"):
 		CurrentThrust += ThrustIncrement
 		CurrentThrust = clamp(CurrentThrust, 0, MaxThrust)
@@ -83,9 +89,17 @@ func setThrustEffect():
 	else:
 		EngineSound.stop()
 
+func checkCashAndOpenUpgradeBar():
+	if SideBarDemoCompleted == false and Cash > 1000:
+		SideBarDemoCompleted = true
+		connect("shopping_requested", global.getMain(), "_on_ship_shopping_requested")
+		emit_signal("shopping_requested")
+		disconnect("shopping_requested", global.getMain(), "_on_ship_shopping_requested")
+
 func _process(delta):
 	get_input()
 	setThrustEffect()
+	checkCashAndOpenUpgradeBar()
 
 func _physics_process(delta):
 	var vel = get_linear_velocity()
@@ -127,6 +141,7 @@ func sellGoodsToPlanet(planet):
 	if getInventoryItemCount() > 0:
 		if planet == CompassTarget and planet.has_method("_on_ship_sell_requested"):
 			for commodity in CommoditiesHeld:
+				# (self.name, " trying to sell: ", CommoditiesHeld)
 				connect("sell", planet, "_on_ship_sell_requested")
 				emit_signal("sell", self, commodity, CommoditiesHeld[commodity])
 				disconnect("sell", planet, "_on_ship_sell_requested")
@@ -139,10 +154,12 @@ func buyGoodsFromPlanet(planet):
 		disconnect("buy", planet, "_on_ship_commodities_requested")
 	
 func tradeCommodities(planetArr):
+	if planetArr is Array == false:
+		print(self.name, " error in tradeCommodities, expected planetArr to be an array", planetArr)
 	if planetArr != null and planetArr.size() > 0:
 		for planet in planetArr:
+			sellGoodsToPlanet(planet) # does this order matter?
 			buyGoodsFromPlanet(planet)
-			sellGoodsToPlanet(planet)
 	
 func pickup_commodity(collectibleObj, commodityType):
 	# Note: This is called from a foreign class:
@@ -300,6 +317,13 @@ func _on_UpgradeButtons_upgrade_pressed(upgradeType, upgradeCost, requestingObj)
 					$Weapons/DualLasers/Muzzles/Starboard2.show()
 			"engines":
 				if level == 1:
+					MaxThrust = 3500
+					ThrustIncrement = 800
+					SpinThrust = 25000
+					MaxSpeed = 5500
+					$thrust.set_self_modulate(Color.lightgreen)
+					
+				elif level == 2:
 					MaxThrust = 5500
 					ThrustIncrement = 1200
 					SpinThrust = 35000

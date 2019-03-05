@@ -18,9 +18,9 @@ extends Control
 
 export var DialogText : Array  = [""]
 
-onready var LetterTimer = $DialogTextLabel/LetterTimer
-onready var DialogBox = $DialogTextBox
-onready var KeypressAudio = $KeypressNoise
+onready var LetterTimer = $Panel/MarginContainer/LetterTimer
+onready var DialogBox = $Panel/MarginContainer/DialogTextBox
+onready var KeypressAudio = $Panel/MarginContainer/KeypressNoise
 
 var CurrentLine = 0
 var DisplayedText = ""
@@ -137,10 +137,10 @@ func _on_LetterTimer_timeout():
 
 # allow the user to left-click on the dialog box to proceed.
 # (but not mouse-wheel!)
-func _on_ColorRect_gui_input(event):
-	if event is InputEventMouseButton and event.is_pressed():
-		if event.button_index == BUTTON_LEFT:
-			revealAllLettersOrShowNextLine()
+#func _on_ColorRect_gui_input(event):
+#	if event is InputEventMouseButton and event.is_pressed():
+#		if event.button_index == BUTTON_LEFT:
+#			revealAllLettersOrShowNextLine()
 
 
 func _on_DialogTextBox_gui_input(event):
@@ -155,3 +155,9 @@ func _on_DialogTextBox_meta_clicked(meta):
 	pass
 	#OS.shell_open(meta);
 	#OS.shell_execute("https://www.github.com/plexsoup");
+
+
+func _on_Panel_gui_input(event):
+	if event is InputEventMouseButton and event.is_pressed():
+		if event.button_index == BUTTON_LEFT:
+			revealAllLettersOrShowNextLine()

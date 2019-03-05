@@ -1,5 +1,23 @@
 """
 
+Playtest Feedback:
+	- TigerJ = too hard
+	- Joshua McLean 
+		- needs more stars
+		- ship's too fast
+		- audio levels are terrible.. why would I allow clipping?
+			- I don't know how to prevent that.
+		- What's my goal?
+		- when you zoom out, you can't tell what direction you're facing.
+			- maybe make the ship a triangle shap, so it looks good zoomed
+			(or have an alternate sprite like I did with cactus notes)
+		
+	(both basically gave up without any upgrades. That's a problem.)
+	
+	- needs help menu or popup tips
+	- ship should be capsule collision, not rect
+	
+		
 TODO:
 	- mar 1: 
 	
@@ -35,12 +53,12 @@ Minimum Features Required
 
 
 Bugs to Fix
-	- tree freequently grabs input it shouldn't
 	
 	
-	- add a pause option
-	- html export has double-image
-		- maybe because of two viewports.
+	- sometimes the selected planet won't accept sale.
+		 - it gets deselected somehow.
+		- problem seems to be with specific planets. Not all the stars in the same system
+		- the planet appears to be selected properly, then the selection switches to null.
 	
 	
 	- opening and closing the sidebar selects a planet
@@ -50,9 +68,9 @@ Bugs to Fix
 	
 	
 Game-Feel / User Experience Enhancements to Make
-	- needs a music track, but I haven't settled on one
-		- maybe back to bosca.ceoil or turtle.audio
-	- stars could have a self-modulate to make their colors a litle different from each other
+	- auto-open the sidebar when you have enough cash?
+	
+	
 	- be nice to have a couple different planets too
 	
 	- when you hit enemies, the second hit should not show a shield

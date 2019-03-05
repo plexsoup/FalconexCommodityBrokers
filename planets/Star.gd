@@ -66,7 +66,10 @@ func getPlanets():
 	return $Planets.get_children()
 
 func getRandomPlanet():
+
 	var planets = getPlanets()
+	if planets is Array == false:
+		print(self.name, " potential error in getRandomPlanets. Expected an array.")
 	return planets[randi()%planets.size()]
 
 func getLinearVelocity():

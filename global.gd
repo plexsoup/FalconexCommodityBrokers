@@ -12,9 +12,27 @@ var CurrentGalaxy
 var BaseFont
 var GameSpeed : float = 1.0
 
+enum STATES { paused, active }
+var CurrentState = STATES.active
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
+
+func getState():
+	return CurrentState
+
+func pauseGame():
+	CurrentState = STATES.paused
+	get_tree().paused = true
+
+func resumeGame():
+	CurrentState = STATES.active
+	get_tree().paused = false
+
+func quitGame():
+	get_tree().quit()
 
 func setMain(scene):
 	Main = scene
@@ -57,3 +75,17 @@ func getGameSpeed():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
+
+
+func _on_PausePanel_resume_pressed():
+	resumeGame()
+
+func _on_PausePanel_quit_pressed():
+	quitGame()
+
+func _on_PausePanel_pause_requested():
+	pauseGame()
+	
+#func _on_pause_requested():
+#	pauseGame()
+	

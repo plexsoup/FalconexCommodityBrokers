@@ -148,7 +148,7 @@ func orbit(delta):
 func trade_commodities(commodityDict, intendedPlanet):
 	var total = 0
 	if not ClosedForBusiness:
-		print(self.name, ": intendedPlanet == ", intendedPlanet )
+		#print(self.name, ": intendedPlanet == ", intendedPlanet )
 		if intendedPlanet == self: # player only sells to planets they've selected on the list (to prevent accidental sales)
 			for commodity in CommodityTypes:
 				total += commodityDict[commodity] * PriceList[commodity]
@@ -211,7 +211,8 @@ func _on_ship_sell_requested(seller, commodityName, quantity):
 			ClosedForBusiness = true
 			$VisitLockoutTimer.start()
 			playThankYouMessage()
-	
+	else:
+		print(self.name, " planet closed for business. Sorry. This probably needs better in-game feedback." )
 			
 func _on_ship_commodities_requested(shipObj):
 	ejectCommoditiesForVisitingShip()
