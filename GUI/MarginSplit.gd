@@ -2,46 +2,52 @@ extends HSplitContainer
 
 var PreviousOffset : float
 var DesiredOffset : float
-var OpenOffset : float = 145.0
-var ClosedOffset : float = 0.0
-var InitialOffset : float = 0.0
+export var OpenOffset : float = 145.0
+export var ClosedOffset : float = 0.0
+export var InitialOffset : float = 0.0
+
+export var TweenNodePath = "/Tween"
+export var SlideNoisePath = "/SlideNoise"
+var TweenNode
+var SlideNoise
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	#clamp_split_offset()
 	set_split_offset(0)
+	TweenNode = get_node(TweenNodePath)
+	SlideNoise = get_node(SlideNoisePath)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
 
 func slidePanel():
-	var tween = get_node("Tween")
-	
-	tween.interpolate_property(self, "split_offset",
+	TweenNode.interpolate_property(self, "split_offset",
 	        PreviousOffset, DesiredOffset, 0.33,
 	        Tween.TRANS_LINEAR, Tween.EASE_OUT)
-	tween.start()
-	$SlideNoise.play()
+	TweenNode.start()
+	SlideNoise.play()
 
 func openPanel():
-	$PanelContainer/ButtonMover/MarginContainer/UpgradeButtons.show()
+	#$LeftPanel/Upgrades.show()
 	PreviousOffset = get_split_offset()
 	DesiredOffset = OpenOffset
 	slidePanel()
-	
+
 func closePanel():
 	PreviousOffset = get_split_offset()
 	DesiredOffset = ClosedOffset
 	slidePanel()
-	var tween = get_node("Tween")
-	yield(tween, "tween_completed")
-	$PanelContainer/ButtonMover/MarginContainer/UpgradeButtons.hide()
+	yield(TweenNode, "tween_completed")
+	#$LeftPanel/Upgrades.hide()
 
 
-func _on_LeftButton_toggled(button_pressed):
+func _on_PanelButton_toggled(button_pressed):
 	if button_pressed == true:
 		openPanel()
 	else:
 		closePanel()
-		
+
+

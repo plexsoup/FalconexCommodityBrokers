@@ -166,3 +166,15 @@ func _on_UpgradeButtons_upgrade_pressed(typeOfUpgrade, requestingObj):
 
 	# for now...
 	MaxEnemies += 5
+
+func _on_pin_joint_requested(nodeA, nodeB): 
+	# a is ship, b is wagon
+	var newPinJoint = PinJoint2D.new()
+	$Joints.add_child(newPinJoint)
+	newPinJoint.set_exclude_nodes_from_collision(false)
+	newPinJoint.set_global_position(nodeA.get_global_position() - Vector2(50, 0).rotated(nodeB.get_global_rotation()))
+	# why can't the pinjoint exist at the location of the ship? Maybe it's best to put it at the hitching point.
+	newPinJoint.set_node_a(newPinJoint.get_path_to(nodeA))
+	newPinJoint.set_node_b(newPinJoint.get_path_to(nodeB))
+	
+	

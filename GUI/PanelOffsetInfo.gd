@@ -1,7 +1,8 @@
-extends Panel
+extends Label
 
 # Declare member variables here. Examples:
-onready var MySplitContainer = get_node("../..")
+# var a = 2
+# var b = "text"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -9,5 +10,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	position.x = MySplitContainer.get_split_offset() - 140
-	
+	var panelsRoot = get_node("../../../../../..")
+	var MyPanel = panelsRoot.find_node("BottomSplitContainer")
+	set_text("right pane offset: " + str( MyPanel.get_split_offset()))

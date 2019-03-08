@@ -32,6 +32,7 @@ func _process(delta):
 	if CurrentState == STATES.initializing:
 		if Ticks % 60 == 0:
 			if global.getPlayerShip() != null:
+				MaxUpgrades = global.getPlayerShip().getMaxUpgrade(UpgradeName)
 				CurrentState = STATES.ready
 				set_disabled(false)
 			

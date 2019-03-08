@@ -1,0 +1,219 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://styles/scifi_theme.tres" type="Theme" id=1]
+[ext_resource path="res://GUI/panels.gd" type="Script" id=2]
+[ext_resource path="res://GUI/MarginSplit.gd" type="Script" id=3]
+[ext_resource path="res://GUI/Upgrades.tscn" type="PackedScene" id=4]
+[ext_resource path="res://GUI/VSplitContainer.gd" type="Script" id=5]
+[ext_resource path="res://GUI/NewsAndQuests.tscn" type="PackedScene" id=6]
+[ext_resource path="res://styles/sideBarButtons.tres" type="StyleBox" id=7]
+[ext_resource path="res://GUI/PanelButton.gd" type="Script" id=8]
+[ext_resource path="res://GUI/PausePanel.tscn" type="PackedScene" id=9]
+[ext_resource path="res://GUI/PlanetList.tscn" type="PackedScene" id=10]
+[ext_resource path="res://effects/slide2.wav" type="AudioStream" id=11]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.0352941, 0.0666667, 0.176471, 0.568627 )
+border_width_right = 15
+border_color = Color( 0.882353, 0.74902, 0.0862745, 0.501961 )
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.0352941, 0.0666667, 0.176471, 0.568627 )
+border_width_bottom = 15
+border_color = Color( 0.882353, 0.74902, 0.0862745, 0.501961 )
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0.0352941, 0.0666667, 0.176471, 0.568627 )
+border_width_top = 15
+border_color = Color( 0.882353, 0.74902, 0.0862745, 0.501961 )
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0.0352941, 0.0666667, 0.176471, 0.568627 )
+border_width_left = 15
+border_color = Color( 0.882353, 0.74902, 0.0862745, 0.501961 )
+corner_radius_top_left = 16
+corner_radius_bottom_left = 16
+
+[node name="Panels" type="Control"]
+pause_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="LeftSplitContainer" type="HSplitContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = ExtResource( 3 )
+TweenNodePath = "../Tween"
+SlideNoisePath = "../SlideNoise"
+
+[node name="LeftPanel" type="Panel" parent="LeftSplitContainer"]
+margin_right = 5.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 5, 0 )
+theme = ExtResource( 1 )
+custom_styles/panel = SubResource( 1 )
+
+[node name="Upgrades" parent="LeftSplitContainer/LeftPanel" instance=ExtResource( 4 )]
+
+[node name="RightSplitContainer" type="HSplitContainer" parent="LeftSplitContainer"]
+margin_left = 17.0
+margin_right = 1024.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+script = ExtResource( 3 )
+OpenOffset = -288.0
+TweenNodePath = "../../Tween"
+SlideNoisePath = "../../SlideNoise"
+
+[node name="TopSplitContainer" type="VSplitContainer" parent="LeftSplitContainer/RightSplitContainer"]
+margin_right = 990.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+script = ExtResource( 5 )
+OpenOffset = 55.0
+TweenNodePath = "../../../Tween"
+SlideNoisePath = "../../../SlideNoise"
+
+[node name="TopPanel" type="Panel" parent="LeftSplitContainer/RightSplitContainer/TopSplitContainer"]
+margin_right = 990.0
+margin_bottom = 5.0
+rect_min_size = Vector2( 0, 5 )
+size_flags_horizontal = 5
+custom_styles/panel = SubResource( 2 )
+
+[node name="NewsAndQuests" parent="LeftSplitContainer/RightSplitContainer/TopSplitContainer/TopPanel" instance=ExtResource( 6 )]
+
+[node name="BottomSplitContainer" type="VSplitContainer" parent="LeftSplitContainer/RightSplitContainer/TopSplitContainer"]
+margin_top = 17.0
+margin_right = 990.0
+margin_bottom = 600.0
+script = ExtResource( 5 )
+OpenOffset = -350.0
+TweenNodePath = "../../../../Tween"
+SlideNoisePath = "../../../../SlideNoise"
+
+[node name="MainView" type="ReferenceRect" parent="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer"]
+margin_right = 990.0
+margin_bottom = 566.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RightPanelButton" type="Button" parent="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer/MainView"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -17.0
+margin_top = -50.0
+margin_right = 15.0
+margin_bottom = -18.0
+rect_rotation = -90.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+custom_styles/hover = ExtResource( 7 )
+custom_styles/pressed = ExtResource( 7 )
+custom_styles/focus = ExtResource( 7 )
+custom_styles/normal = ExtResource( 7 )
+toggle_mode = true
+text = "="
+script = ExtResource( 8 )
+HoverText = "Market"
+
+[node name="TopPanelButton" type="Button" parent="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer/MainView"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -16.0
+margin_top = -12.0
+margin_right = 16.0
+margin_bottom = 20.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+custom_styles/hover = ExtResource( 7 )
+custom_styles/pressed = ExtResource( 7 )
+custom_styles/focus = ExtResource( 7 )
+custom_styles/normal = ExtResource( 7 )
+toggle_mode = true
+text = "="
+script = ExtResource( 8 )
+HoverText = "News & Jobs"
+
+[node name="BottomPanelButton" type="Button" parent="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer/MainView"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -16.0
+margin_top = -15.0
+margin_right = 16.0
+margin_bottom = 17.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+custom_styles/hover = ExtResource( 7 )
+custom_styles/pressed = ExtResource( 7 )
+custom_styles/focus = ExtResource( 7 )
+custom_styles/normal = ExtResource( 7 )
+toggle_mode = true
+text = "="
+script = ExtResource( 8 )
+HoverText = "Controls"
+
+[node name="LeftPanelButton" type="Button" parent="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer/MainView"]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = -12.0
+margin_top = -50.0
+margin_right = 20.0
+margin_bottom = -18.0
+rect_rotation = -90.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme = ExtResource( 1 )
+custom_styles/hover = ExtResource( 7 )
+custom_styles/pressed = ExtResource( 7 )
+custom_styles/focus = ExtResource( 7 )
+custom_styles/normal = ExtResource( 7 )
+toggle_mode = true
+text = "="
+script = ExtResource( 8 )
+HoverText = "Upgrades"
+
+[node name="BottomPanel" type="Panel" parent="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer"]
+show_behind_parent = true
+margin_top = 578.0
+margin_right = 990.0
+margin_bottom = 583.0
+rect_min_size = Vector2( 0, 5 )
+custom_styles/panel = SubResource( 3 )
+
+[node name="PausePanel" parent="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer/BottomPanel" instance=ExtResource( 9 )]
+
+[node name="RightPanel" type="Panel" parent="LeftSplitContainer/RightSplitContainer"]
+show_behind_parent = true
+margin_left = 1002.0
+margin_right = 1007.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 5, 0 )
+custom_styles/panel = SubResource( 4 )
+
+[node name="VBoxContainer" parent="LeftSplitContainer/RightSplitContainer/RightPanel" instance=ExtResource( 10 )]
+
+[node name="Tween" type="Tween" parent="."]
+
+[node name="SlideNoise" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 11 )
+volume_db = -9.0
+bus = "SoundFX"
+
+[connection signal="toggled" from="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer/MainView/RightPanelButton" to="LeftSplitContainer/RightSplitContainer" method="_on_PanelButton_toggled"]
+[connection signal="toggled" from="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer/MainView/TopPanelButton" to="LeftSplitContainer/RightSplitContainer/TopSplitContainer" method="_on_PanelButton_toggled"]
+[connection signal="toggled" from="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer/MainView/BottomPanelButton" to="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer" method="_on_PanelButton_toggled"]
+[connection signal="toggled" from="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer/MainView/LeftPanelButton" to="LeftSplitContainer" method="_on_PanelButton_toggled"]

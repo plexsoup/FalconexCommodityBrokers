@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://styles/scifi_theme.tres" type="Theme" id=1]
+[ext_resource path="res://NewsAndQuests.gd" type="Script" id=2]
+[ext_resource path="res://NewsCrawlTextBox.gd" type="Script" id=3]
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[node name="NewsAndQuests" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="NewsPanel" type="Panel" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 0, 50 )
+custom_styles/panel = SubResource( 1 )
+
+[node name="NextNewsItemTimer" type="Timer" parent="."]
+wait_time = 4.0
+autostart = true
+
+[node name="NewsCrawlItem" type="RichTextLabel" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+text = "news"
+script = ExtResource( 3 )
+
+[connection signal="timeout" from="NextNewsItemTimer" to="." method="_on_NextNewsItemTimer_timeout"]

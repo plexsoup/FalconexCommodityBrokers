@@ -1,21 +1,13 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Level1.gd" type="Script" id=1]
-[ext_resource path="res://Design Notes.gd" type="Script" id=2]
-[ext_resource path="res://galaxy.gd" type="Script" id=3]
-[ext_resource path="res://planets/activesuperm.png" type="Texture" id=4]
-[ext_resource path="res://styles/scifi_theme.tres" type="Theme" id=5]
-[ext_resource path="res://WarningPanel.gd" type="Script" id=6]
-[ext_resource path="res://styles/fonts/Righteous26.tres" type="DynamicFont" id=7]
-[ext_resource path="res://styles/scifiPanel.tres" type="StyleBox" id=8]
-[ext_resource path="res://InventoryDisplayPanel.gd" type="Script" id=9]
-[ext_resource path="res://icons/wheat.png" type="Texture" id=10]
-[ext_resource path="res://InvDisplayLabel.gd" type="Script" id=11]
-[ext_resource path="res://icons/cog.png" type="Texture" id=12]
-[ext_resource path="res://icons/cut-diamond.png" type="Texture" id=13]
-[ext_resource path="res://icons/crown-coin.png" type="Texture" id=14]
-[ext_resource path="res://GravWell.gd" type="Script" id=15]
-[ext_resource path="res://music/Kevin_MacLeod_-_Blue_Feather.ogg" type="AudioStream" id=16]
+[ext_resource path="res://galaxy.gd" type="Script" id=2]
+[ext_resource path="res://planets/activesuperm.png" type="Texture" id=3]
+[ext_resource path="res://styles/scifi_theme.tres" type="Theme" id=4]
+[ext_resource path="res://WarningPanel.gd" type="Script" id=5]
+[ext_resource path="res://styles/fonts/Righteous26.tres" type="DynamicFont" id=6]
+[ext_resource path="res://GravWell.gd" type="Script" id=7]
+[ext_resource path="res://music/Kevin_MacLeod_-_Blue_Feather.ogg" type="AudioStream" id=8]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 14.9678
@@ -35,11 +27,8 @@ radius = 4448.02
 [node name="Level1" type="Node2D"]
 script = ExtResource( 1 )
 
-[node name="Design Notes" type="Node" parent="."]
-script = ExtResource( 2 )
-
 [node name="galaxy" type="Node2D" parent="."]
-script = ExtResource( 3 )
+script = ExtResource( 2 )
 
 [node name="BGStars" type="Node2D" parent="galaxy"]
 self_modulate = Color( 1, 1, 1, 0.501961 )
@@ -51,7 +40,7 @@ collision_mask = 0
 [node name="Sprite" type="Sprite" parent="galaxy/BlackHole"]
 position = Vector2( 1.24838, -2.77878 )
 scale = Vector2( 2, 2 )
-texture = ExtResource( 4 )
+texture = ExtResource( 3 )
 offset = Vector2( 6.36433, 45.7419 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="galaxy/BlackHole"]
@@ -70,9 +59,9 @@ margin_left = -123.0
 margin_right = 123.0
 margin_bottom = 100.0
 rect_min_size = Vector2( 0, 100 )
-theme = ExtResource( 5 )
+theme = ExtResource( 4 )
 custom_styles/panel = SubResource( 2 )
-script = ExtResource( 6 )
+script = ExtResource( 5 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -82,140 +71,26 @@ margin_left = 1.0
 margin_top = 26.0
 margin_right = 245.0
 margin_bottom = 59.0
-theme = ExtResource( 5 )
-custom_fonts/font = ExtResource( 7 )
+theme = ExtResource( 4 )
+custom_fonts/font = ExtResource( 6 )
 text = "Alert: Inventory Full!"
 align = 1
-
-[node name="InventoryDisplayPanel" type="PanelContainer" parent="CanvasLayer"]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -175.0
-margin_right = 175.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 350, 0 )
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme = ExtResource( 5 )
-custom_styles/panel = ExtResource( 8 )
-script = ExtResource( 9 )
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="GridContainer" type="GridContainer" parent="CanvasLayer/InventoryDisplayPanel"]
-margin_left = 33.0
-margin_right = 317.0
-margin_bottom = 33.0
-size_flags_horizontal = 4
-size_flags_vertical = 3
-theme = ExtResource( 5 )
-columns = 8
-
-[node name="Wheat" type="TextureRect" parent="CanvasLayer/InventoryDisplayPanel/GridContainer"]
-margin_right = 32.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
-size_flags_horizontal = 0
-size_flags_vertical = 0
-texture = ExtResource( 10 )
-expand = true
-
-[node name="WheatLabel" type="Label" parent="CanvasLayer/InventoryDisplayPanel/GridContainer"]
-margin_left = 36.0
-margin_right = 68.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 32, 32 )
-size_flags_horizontal = 0
-size_flags_vertical = 0
-theme = ExtResource( 5 )
-custom_fonts/font = ExtResource( 7 )
-text = "5"
-script = ExtResource( 11 )
-
-[node name="Cog" type="TextureRect" parent="CanvasLayer/InventoryDisplayPanel/GridContainer"]
-margin_left = 72.0
-margin_right = 104.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
-size_flags_horizontal = 0
-size_flags_vertical = 0
-texture = ExtResource( 12 )
-expand = true
-
-[node name="CogLabel" type="Label" parent="CanvasLayer/InventoryDisplayPanel/GridContainer"]
-margin_left = 108.0
-margin_right = 140.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 32, 32 )
-size_flags_horizontal = 0
-size_flags_vertical = 0
-theme = ExtResource( 5 )
-custom_fonts/font = ExtResource( 7 )
-text = "5"
-script = ExtResource( 11 )
-CommodityType = "cog"
-
-[node name="Diamond" type="TextureRect" parent="CanvasLayer/InventoryDisplayPanel/GridContainer"]
-margin_left = 144.0
-margin_right = 176.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
-size_flags_horizontal = 0
-size_flags_vertical = 0
-texture = ExtResource( 13 )
-expand = true
-
-[node name="DiamondLabel" type="Label" parent="CanvasLayer/InventoryDisplayPanel/GridContainer"]
-margin_left = 180.0
-margin_right = 212.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 32, 32 )
-size_flags_horizontal = 0
-size_flags_vertical = 0
-theme = ExtResource( 5 )
-custom_fonts/font = ExtResource( 7 )
-text = "5"
-script = ExtResource( 11 )
-CommodityType = "diamond"
-
-[node name="CashIcon" type="TextureRect" parent="CanvasLayer/InventoryDisplayPanel/GridContainer"]
-margin_left = 216.0
-margin_right = 248.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 32, 32 )
-texture = ExtResource( 14 )
-expand = true
-
-[node name="CashOnHand" type="Label" parent="CanvasLayer/InventoryDisplayPanel/GridContainer"]
-margin_left = 252.0
-margin_right = 284.0
-margin_bottom = 33.0
-rect_min_size = Vector2( 32, 32 )
-size_flags_horizontal = 0
-size_flags_vertical = 0
-theme = ExtResource( 5 )
-custom_fonts/font = ExtResource( 7 )
-text = "5"
-script = ExtResource( 11 )
-CommodityType = "cash"
 
 [node name="Bullets" type="Node2D" parent="."]
 
 [node name="Collectibles" type="Node2D" parent="."]
 
+[node name="Joints" type="Node2D" parent="."]
+
 [node name="GravWell" type="Area2D" parent="."]
 space_override = 3
 gravity_point = true
 gravity_vec = Vector2( 0, 0 )
-gravity = 250.0
-linear_damp = 0.03
-angular_damp = 5.0
+angular_damp = 0.1
 priority = 20.0
-script = ExtResource( 15 )
+script = ExtResource( 7 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GravWell"]
-visible = false
 position = Vector2( 3, 27 )
 shape = SubResource( 3 )
 
@@ -226,7 +101,7 @@ autostart = true
 [node name="Tween" type="Tween" parent="."]
 
 [node name="BGMusic-normal" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 16 )
+stream = ExtResource( 8 )
 volume_db = -15.459
 autoplay = true
 bus = "Music"

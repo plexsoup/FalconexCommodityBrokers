@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://ships/CargoWagon.gd" type="Script" id=1]
+[ext_resource path="res://ships/falcon-storage2.png" type="Texture" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 62.1101, 49.5419 )
+
+[node name="CargoWagon" type="RigidBody2D"]
+position = Vector2( -110.02, -0.0205264 )
+collision_mask = 7
+mass = 0.25
+script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 2.32483, -1.10375 )
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 2 )
+offset = Vector2( -8.01312, 5.35336 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0.0431747, 0.0798864 )
+shape = SubResource( 1 )
+disabled = true
+

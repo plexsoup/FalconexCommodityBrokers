@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://ships/ship.gd" type="Script" id=1]
 [ext_resource path="res://Camera2D.gd" type="Script" id=2]
@@ -19,10 +19,15 @@
 [ext_resource path="res://effects/shields.png" type="Texture" id=17]
 [ext_resource path="res://ships/Shield.gd" type="Script" id=18]
 [ext_resource path="res://effects/shields.wav" type="AudioStream" id=19]
-[ext_resource path="res://ships/CompassTaget.gd" type="Script" id=20]
+[ext_resource path="res://styles/scifi_theme.tres" type="Theme" id=20]
+[ext_resource path="res://ships/falcon-storage1.png" type="Texture" id=21]
+[ext_resource path="res://ships/radarShip.png" type="Texture" id=22]
+[ext_resource path="res://ships/RadarShipSprite.gd" type="Script" id=23]
+[ext_resource path="res://ships/Engine.tscn" type="PackedScene" id=24]
+[ext_resource path="res://pilots/PlayerInputController.tscn" type="PackedScene" id=25]
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 29.8351, 31.1695 )
+[sub_resource type="CircleShape2D" id=1]
+radius = 48.7196
 
 [sub_resource type="CircleShape2D" id=2]
 radius = 283.598
@@ -196,15 +201,16 @@ tracks/5/keys = {
 }
 
 [node name="Ship" type="RigidBody2D"]
+position = Vector2( 28.323, 0.291985 )
 collision_mask = 7
 contacts_reported = 5
 contact_monitor = true
 linear_damp = 0.1
-angular_damp = 5.0
+angular_damp = 1.5
 script = ExtResource( 1 )
 MaxThrust = 1500.0
 ThrustIncrement = 800.0
-SpinThrust = 18000.0
+SpinThrust = 25000.0
 MaxSpeed = 2500.0
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -292,6 +298,7 @@ wait_time = 0.3
 one_shot = true
 
 [node name="thrust" type="Sprite" parent="."]
+visible = false
 self_modulate = Color( 1, 1, 1, 0.345098 )
 position = Vector2( -28.0605, 0.147163 )
 texture = ExtResource( 11 )
@@ -359,14 +366,76 @@ anims/shields2 = SubResource( 5 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="CompassTarget" type="Label" parent="CanvasLayer"]
+[node name="Panel" type="GridContainer" parent="CanvasLayer"]
+margin_left = 78.0
+margin_top = 54.0
+margin_right = 167.0
+margin_bottom = 104.0
+theme = ExtResource( 20 )
+
+[node name="SpinThrust" type="Label" parent="CanvasLayer/Panel"]
+margin_right = 105.0
+margin_bottom = 21.0
+text = "SpinThrust: "
+
+[node name="ElapsedTime" type="Label" parent="CanvasLayer/Panel"]
+margin_top = 25.0
+margin_right = 105.0
+margin_bottom = 46.0
+text = "Elapsed Time:"
+
+[node name="GodotVersion" type="Label" parent="CanvasLayer/Panel"]
+margin_top = 50.0
+margin_right = 105.0
+margin_bottom = 71.0
+text = "Version: "
+
+[node name="Storage1" type="Sprite" parent="."]
 visible = false
-margin_left = 169.275
-margin_top = 48.8721
-margin_right = 209.275
-margin_bottom = 73.8721
-text = "target"
-script = ExtResource( 20 )
+position = Vector2( -0.647079, 0.440119 )
+scale = Vector2( 0.15, 0.15 )
+texture = ExtResource( 21 )
+
+[node name="RadarShipSprite" type="Sprite" parent="."]
+visible = false
+self_modulate = Color( 1, 1, 1, 0 )
+position = Vector2( 34.33, 1.5229e-005 )
+scale = Vector2( 0.66, 0.66 )
+texture = ExtResource( 22 )
+script = ExtResource( 23 )
+
+[node name="Tween" type="Tween" parent="RadarShipSprite"]
+
+[node name="PinJoint2D" type="PinJoint2D" parent="."]
+position = Vector2( -53.4674, 0 )
+node_a = NodePath("../RigidBody2D")
+node_b = NodePath("..")
+
+[node name="Engines" type="Node2D" parent="."]
+
+[node name="PortEngine1" parent="Engines" instance=ExtResource( 24 )]
+position = Vector2( -45, -25 )
+SubscribedKeyOne = "forward"
+
+[node name="PortEngine2" parent="Engines" instance=ExtResource( 24 )]
+position = Vector2( 46, -20 )
+rotation = 2.0944
+SubscribedKeyOne = "starboard"
+SubscribedKeyTwo = "reverse"
+ThrustSizeAndVolume = 0.25
+
+[node name="StarboardEngine1" parent="Engines" instance=ExtResource( 24 )]
+position = Vector2( -45, 25 )
+SubscribedKeyOne = "forward"
+
+[node name="StarboardEngine2" parent="Engines" instance=ExtResource( 24 )]
+position = Vector2( 46, 20 )
+rotation = -2.0944
+SubscribedKeyOne = "port"
+SubscribedKeyTwo = "reverse"
+ThrustSizeAndVolume = 0.25
+
+[node name="PlayerInputController" parent="." instance=ExtResource( 25 )]
 
 [connection signal="timeout" from="Weapons/MissileLaunchers/ReloadTimer" to="Weapons/MissileLaunchers" method="_on_ReloadTimer_timeout"]
 [connection signal="finished" from="InventoryFullNoise" to="." method="_on_InventoryFullNoise_finished"]

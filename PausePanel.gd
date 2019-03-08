@@ -1,4 +1,4 @@
-extends Panel
+extends PanelContainer
 
 # Declare member variables here. Examples:
 
@@ -6,7 +6,6 @@ var Ticks = 0
 
 
 onready var global = get_node("/root/global")
-onready var MyAnimationPlayer = get_node("AnimationPlayer")
 
 var Paused : bool = false
 
@@ -20,15 +19,19 @@ signal quit_game()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	yield(get_tree().create_timer(.1), "timeout") # wait for main
+	
 	connect("pause_game", global, "_on_PausePanel_pause_requested")
 	
 	connect("resume_game", global, "_on_PausePanel_resume_pressed")
+	connect("resume_game", global.getMain(), "_on_PausePanel_resume_pressed")
+
 	connect("quit_game", global, "_on_PausePanel_quit_pressed")
 
 	
-	hide()
+	#hide()
 	
-	var textBox = $MarginContainer/VBoxContainer/RichTextLabel
+	var textBox = $MarginContainer/VBoxContainer/HSplitContainer2/RichTextLabel
 	textBox.set_bbcode(
 	"""Hello. Thank you for playing.
 
@@ -59,17 +62,20 @@ func _process(delta):
 	# showPanel input is captured in Main.
 
 func unhidePanel():
-	Paused = true
-	show()
-	MyAnimationPlayer.play("reveal")
-	yield(MyAnimationPlayer, "animation_finished")
-	
-func hidePanel():
-	Paused = false
-	MyAnimationPlayer.play("hide")
-	yield(MyAnimationPlayer, "animation_finished")	
-	hide()
+#	Paused = true
+#	show()
+#	MyAnimationPlayer.play("reveal")
+#	yield(MyAnimationPlayer, "animation_finished")
+	pass
+	# send a signal to the Bottom Button.
 
+func hidePanel():
+#	Paused = false
+#	MyAnimationPlayer.play("hide")
+#	yield(MyAnimationPlayer, "animation_finished")	
+#	hide()
+	pass
+	# send a signal to the bottom button
 	
 
 

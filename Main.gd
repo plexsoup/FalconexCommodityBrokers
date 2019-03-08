@@ -11,9 +11,12 @@ enum STATES { initializing, playing, paused }
 var CurrentState = STATES.playing
 
 onready var LevelScenes = [ "res://Levels/intro.tscn", "res://Levels/Level1.tscn", "res://Levels/Level2.tscn" ]
+onready var Panels = get_node("CanvasLayer/Panels")
 
 signal DialogBox_completed_relay(boxTitle)
 signal pause_requested()
+signal open_panel(panelName)
+signal close_panel(panelName)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -49,7 +52,8 @@ func launchNextLevel():
 func spawnDialogBox(boxTitle, textArr, requestedBy):
 	var dialogBox = preload("res://DialogBox.tscn")
 	var newDialogBox = dialogBox.instance()
-	$"CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit/spacer-forMainScene".add_child(newDialogBox)
+	var dialogBoxContainer = find_node("DialogBoxes")
+	dialogBoxContainer.add_child(newDialogBox)
 	var GUID = newDialogBox.start(boxTitle, textArr, self, requestedBy)
 	ActiveDialogBoxes.push_back(GUID)
 	
@@ -73,7 +77,10 @@ func _on_DialogBox_completed(boxTitle, requestedBy):
 	pass
 	
 func _on_Level_pause_requested():
-	var PausePanel = $"CanvasLayer/WindowTiler/LeftMarginSplit/RightMarginSplit/spacer-forMainScene/Node2D/PausePanel"
+	var PausePanel = find_node("PausePanel")
+	connect("open_panel", Panels, "_on_open_panel_requested")
+	emit_signal("open_panel", "bottom")
+	disconnect("open_panel", Panels, "_on_open_panel_requested")
 	
 	connect("pause_requested", PausePanel, "_on_main_pause_requested")
 	emit_signal("pause_requested")
@@ -88,12 +95,15 @@ func _on_Level_pause_requested():
 #	CurrentState = STATES.playing
 	
 	
-func _on_ship_shopping_requested():
-	
-	var LeftButton = find_node("LeftButton")
-	var LeftMarginSplit = find_node("LeftMarginSplit")
+func _on_ship_shopping_requested(): # happens when you have > 1000 cash
+	# **** this should be a signal. Why are you accessing functions directly?
+	var LeftButton = find_node("LeftPanelButton")
+	var LeftMarginSplit = find_node("LeftSplitContainer")
 	if LeftButton.pressed == false:
 		LeftButton.pressed = true
-		LeftMarginSplit._on_LeftButton_toggled(true)
+		LeftMarginSplit._on_PanelButton_toggled(true)
 
-	
+func _on_PausePanel_resume_pressed(): # close the bottom panel
+	connect("close_panel", Panels, "_on_close_panel_requested")
+	emit_signal("close_panel", "bottom")
+	disconnect("close_panel", Panels, "_on_close_panel_requested")

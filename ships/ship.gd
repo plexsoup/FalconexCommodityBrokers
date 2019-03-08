@@ -28,7 +28,7 @@ var CommoditiesHeld = {"wheat":0, "diamond":0, "cog":0}
 var MaxInventoryCount = 16
 
 var UpgradesDict = {"lasers":0, "engines":0, "shields":0, "missiles":0, "magnet":0, "targeting":0, "mines":0, "storage":0}
-var MaxUpgrades = {"lasers":2, "engines":1, "shields":2, "missiles":2, "magnet":2, "targeting":0, "mines":0, "storage":2}
+var MaxUpgrades = {"lasers":2, "engines":2, "shields":2, "missiles":2, "magnet":2, "targeting":0, "mines":0, "storage":2}
 var Cash : int = 0
 
 var rotation_dir = 0
@@ -40,6 +40,9 @@ var Shields : int = 0
 var ShieldAnimation : String = "shields0"
 var SideBarDemoCompleted : bool = false
 
+var Ticks : int = 0
+var ElapsedTime : float = 0
+
 signal sell(commodityName, quantity)
 signal buy(shipObj)
 signal cash_popup_requested(pos, amount)
@@ -47,7 +50,7 @@ signal picked_up_commodity()
 signal filled_inventory()
 signal lost_item(pos, commodityType)
 signal shopping_requested()
-
+signal pin_joint_requested(nodeA, nodeB)
 
 func _ready():
 	start() # why isn't Level calling Start?
@@ -62,6 +65,14 @@ func start():
 
 	connect("cash_popup_requested", global.getCurrentLevel(), "_on_ship_cash_popup_requested")
 
+	initializeEngines()
+
+
+func initializeEngines():
+	for engine in $Engines.get_children():
+		engine.start($PlayerInputController)
+	
+
 func get_input():
 	if global.getState() == global.STATES.paused:
 		return
@@ -73,11 +84,14 @@ func get_input():
 	else:
 		ThrustVector = Vector2(0, 0)
 		CurrentThrust = 0
-	rotation_dir = 0
+
 	if Input.is_action_pressed("turnRight"):
-		rotation_dir += 1
-	if Input.is_action_pressed("turnLeft"):
-		rotation_dir -= 1
+		rotation_dir = 1
+	elif Input.is_action_pressed("turnLeft"):
+		rotation_dir = -1
+	else:
+		rotation_dir = 0
+
 
 func setThrustEffect():
 	var maximumPossibleThrust = 5500 # allow jet to look bigger after upgrade
@@ -96,28 +110,43 @@ func checkCashAndOpenUpgradeBar():
 		emit_signal("shopping_requested")
 		disconnect("shopping_requested", global.getMain(), "_on_ship_shopping_requested")
 
-func _process(delta):
-	get_input()
-	setThrustEffect()
-	checkCashAndOpenUpgradeBar()
+#func _process(delta):
+#	if Ticks % 5 == 0:
+#		updateDebugLabels()
+		
+		
+func updateDebugLabels():
+	$CanvasLayer/Panel/SpinThrust.set_text("Torque: " + str(get_applied_torque() ))
+	$CanvasLayer/Panel/GodotVersion.set_text("Version: " + str( Engine.get_version_info()))
+	$CanvasLayer/Panel/ElapsedTime.set_text("Elapsed Time: " + str(ElapsedTime))
 
-func _physics_process(delta):
+func apply_engine_thrust():
+	setThrustEffect()		
 	var vel = get_linear_velocity()
 	var spd = vel.length()
 	if spd < MaxSpeed:
 		set_applied_force(ThrustVector.rotated(rotation))
 	else:
 		set_applied_force(Vector2.ZERO)
-	set_applied_torque(rotation_dir * SpinThrust)
+	#set_applied_torque(rotation_dir * SpinThrust)
+	
 	
 	if get_linear_velocity().length() > MaxSpeed:
 		set_linear_damp(1)
 	else:
 		set_linear_damp(0.1)
+	
+
+func _physics_process(delta):
+	Ticks += 1
+	ElapsedTime += delta
+	checkCashAndOpenUpgradeBar()
+
+	get_input()
+	#apply_engine_thrust() # moving this to discrete engines
 
 	var planetsColliding = getPlanetsColliding()
-	if planetsColliding.size() > 0:
-		
+	if planetsColliding.size() > 0:		
 		tradeCommodities(planetsColliding)
 
 	if isOutOfBounds():
@@ -252,7 +281,7 @@ func _draw():
 	if CompassTarget != null:
 		draw_line(to_local(get_global_position()), to_local(CompassTarget.get_global_position()), Color(0.2, 1.0, 0.2, 0.5), 2)
 	
-	
+
 func _on_PlanetList_selected_object(object):
 	CompassTarget = object
 	
@@ -319,14 +348,14 @@ func _on_UpgradeButtons_upgrade_pressed(upgradeType, upgradeCost, requestingObj)
 				if level == 1:
 					MaxThrust = 3500
 					ThrustIncrement = 800
-					SpinThrust = 25000
+					SpinThrust = 65000
 					MaxSpeed = 5500
 					$thrust.set_self_modulate(Color.lightgreen)
 					
 				elif level == 2:
 					MaxThrust = 5500
 					ThrustIncrement = 1200
-					SpinThrust = 35000
+					SpinThrust = 80000
 					MaxSpeed = 7500
 					$thrust.set_self_modulate(Color.aquamarine)
 			"shields":
@@ -362,12 +391,30 @@ func _on_UpgradeButtons_upgrade_pressed(upgradeType, upgradeCost, requestingObj)
 			"storage":
 				if level == 1:
 					MaxInventoryCount = 32
+					$Storage1.show()
 				elif level == 2:
 					MaxInventoryCount = 64
+					var newCargoWagon = load("res://ships/CargoWagon.tscn").instance()
+					add_child(newCargoWagon)
+					newCargoWagon.start(self)
+					
+					connect("pin_joint_requested", global.getCurrentLevel(), "_on_pin_joint_requested")
+					emit_signal("pin_joint_requested", self, newCargoWagon)
+					disconnect("pin_joint_requested", global.getCurrentLevel(), "_on_pin_joint_requested")
+					moveEnginesOut()
+#					var pinJoint = $PinJoint2D
+#					pinJoint.set_node_a(pinJoint.get_path_to(self))
+#					pinJoint.set_node_b(pinJoint.get_path_to(newCargoWagon))
+
 		#Notify the Level to increase MaxEnemies
 		
 			
 
+func moveEnginesOut():
+	var engine1 = find_node("PortEngine1")
+	var engine2 = find_node("StarboardEngine1")
+	engine1.set_position(engine1.get_position()-Vector2(0, 50))
+	engine2.set_position(engine2.get_position()+Vector2(0, 50))
 
 
 func _on_InventoryFullNoise_finished():
@@ -382,3 +429,4 @@ func _on_ShieldRechargeTimer_timeout():
 		#print(self.name, " Shields == " , Shields)
 	$Shield/ShieldRechargeTimer.start()
 		
+

@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://GUI/UpgradeButtons.tscn" type="PackedScene" id=1]
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+[node name="Upgrades" type="Panel"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -16.0
+margin_right = -16.0
+size_flags_vertical = 4
+custom_styles/panel = SubResource( 1 )
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -130.0
+margin_top = -133.5
+margin_bottom = 133.5
+
+[node name="UpgradeButtons" parent="MarginContainer" instance=ExtResource( 1 )]
+
