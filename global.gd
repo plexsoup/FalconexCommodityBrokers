@@ -10,7 +10,7 @@ var CurrentCamera
 var CurrentLevel
 var CurrentGalaxy
 var BaseFont
-var GameSpeed : float = 1.0
+var GameSpeed : float = 1.0 # 1.0 is normal
 
 enum STATES { paused, active }
 var CurrentState = STATES.active

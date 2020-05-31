@@ -3,8 +3,12 @@
 	
 		
 TODO:
-	
-	
+	Pickups just stay put, seems weird: consider giving collectibles (wheat, gems, etc.) some movement vectors..
+	Edge of Galaxy is hard and bouncy, seems weird. Consider a warning about deep space instead. maybe multiple galaxies?
+	Engine audio hurts my ears. fudge factor it down -24 db
+	Engine audio doesn't respect master volume control options.
+	Master volume control options allows player to set them way too high.
+
 
 Notes regarding Design Decisions:
 	- What reason does the player have to not shoot?
@@ -43,6 +47,9 @@ Bugs to Fix
 	- opening and closing the sidebar selects a planet
 	- sometimes the wrong planet is selected
 	
+Bugs fixed:
+	engines are faster if the computer is faster.
+	- inputs weren't taking framerate (delta) into consideration
 
 	
 	
@@ -103,7 +110,6 @@ Playtest Feedback:
 	
 	- needs help menu or popup tips
 	- ship should be capsule collision, not rect
-
 	
 """
 

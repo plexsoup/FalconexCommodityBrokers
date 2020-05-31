@@ -105,5 +105,4 @@ stream = ExtResource( 8 )
 volume_db = -15.459
 autoplay = true
 bus = "Music"
-
 [connection signal="timeout" from="EnemySpawnTimer" to="." method="_on_EnemySpawnTimer_timeout"]

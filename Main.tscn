@@ -30,4 +30,3 @@ script = ExtResource( 3 )
 [node name="Level1" parent="Levels" instance=ExtResource( 5 )]
 
 [node name="DialogBoxes" type="CanvasLayer" parent="."]
-

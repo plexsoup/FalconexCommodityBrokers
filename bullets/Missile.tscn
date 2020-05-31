@@ -120,7 +120,6 @@ one_shot = true
 [node name="FuseTimer" type="Timer" parent="."]
 wait_time = 3.0
 one_shot = true
-
 [connection signal="area_entered" from="." to="." method="_on_Missile_area_entered"]
 [connection signal="area_entered" from="Explosion" to="." method="_on_Explosion_area_entered"]
 [connection signal="animation_finished" from="Explosion/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

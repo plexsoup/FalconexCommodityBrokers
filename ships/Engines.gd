@@ -65,20 +65,22 @@ func start(pilotNode):
 	
 	
 func _physics_process(delta):
+	var fudgeFactor = 25.0
 #	# Called every frame. Delta is time since last frame.
 	if THRUST_REQUESTED == true:
-		var thrustVector = Vector2(ThrustFactor, 0)
+		var thrustVector = Vector2(ThrustFactor * fudgeFactor * delta * global.GameSpeed, 0)
+		#var thrustVector = Vector2(ThrustFactor, 0)
 		
 		var shipRotation = ShipRigidBodyNode.get_rotation()
 		ShipRigidBodyNode.apply_impulse(EngineOffset.rotated(shipRotation), thrustVector.rotated(EngineRotation).rotated(shipRotation))
 
-		CurrentThrust += ThrustFactor * delta * global.GameSpeed
+		CurrentThrust += ThrustFactor * fudgeFactor * delta * global.GameSpeed
 		CurrentThrust = clamp(CurrentThrust, 0, MaxThrust)
 
 	if self.has_node("ThrustSprite"):
 		$ThrustSprite.set_scale(ThrustSpriteDefaultScale * (CurrentThrust/MaxThrust) * ThrustSizeAndVolume)
 	if self.has_node("AudioStreamPlayer2D"):
-		$AudioStreamPlayer2D.set_volume_db(12.0 * (CurrentThrust/MaxThrust) * ThrustSizeAndVolume)
+		$AudioStreamPlayer2D.set_volume_db(12.0 * (CurrentThrust/MaxThrust) * ThrustSizeAndVolume - 24)
 #	if self.has_node("Particles2D"):
 #		$Particles2D.set_amount(InitialParticleAmount)
 

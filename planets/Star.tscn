@@ -56,4 +56,3 @@ theme = ExtResource( 4 )
 custom_fonts/font = ExtResource( 5 )
 text = "MyName"
 align = 1
-

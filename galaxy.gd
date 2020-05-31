@@ -28,7 +28,11 @@ func spawnStars(numStars):
 
 func spawnBackgroundStars(numStars):
 	var BGStarScene = load("res://planets/BGStars.tscn")
-	for i in range(randi()%(2*numStars)):
+	var medianStars = numStars
+	var minStars = numStars / 5
+	var maxStars = 2*numStars
+	#for i in range(int(rand_range(minStars,maxStars))):	
+	for i in range(randi()%(2*numStars)): # too often produces very few background stars
 		var newBGStarCluster = BGStarScene.instance()
 		
 		var randDirection = randf()*2*PI

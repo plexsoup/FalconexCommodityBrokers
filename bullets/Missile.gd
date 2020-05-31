@@ -35,9 +35,11 @@ func start(loc, rot, initialVel ):
 	rotation = rot
 
 	$FuseTimer.set_wait_time(0.8+randf())
-	$FuseTimer.start()
+	#$FuseTimer.start() # was throwing errors because start can't be called before the scene is completely loaded
+	$FuseTimer.autostart = true
 
-	$DurationTimer.start() # shouldn't be needed, but just in case.
+	#$DurationTimer.start() # shouldn't be needed, but just in case.
+	$DurationTimer.autostart = true
 
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
