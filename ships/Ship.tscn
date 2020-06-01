@@ -369,11 +369,15 @@ anims/shields2 = SubResource( 5 )
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Panel" type="GridContainer" parent="CanvasLayer"]
+visible = false
 margin_left = 78.0
 margin_top = 54.0
 margin_right = 167.0
 margin_bottom = 104.0
 theme = ExtResource( 20 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="SpinThrust" type="Label" parent="CanvasLayer/Panel"]
 margin_right = 105.0

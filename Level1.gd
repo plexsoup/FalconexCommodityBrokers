@@ -122,6 +122,7 @@ func spawnEnemies(num):
 		newEnemy.start(pos)
 		pos += Vector2(randf()*300+100, randf()*300+100)
 
+	$NewEnemyWaveAudio.play()
 	EnemyWave += 1
 	
 

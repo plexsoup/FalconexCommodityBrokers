@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Level1.gd" type="Script" id=1]
 [ext_resource path="res://galaxy.gd" type="Script" id=2]
@@ -7,7 +7,8 @@
 [ext_resource path="res://WarningPanel.gd" type="Script" id=5]
 [ext_resource path="res://styles/fonts/Righteous26.tres" type="DynamicFont" id=6]
 [ext_resource path="res://GravWell.gd" type="Script" id=7]
-[ext_resource path="res://music/Kevin_MacLeod_-_Blue_Feather.ogg" type="AudioStream" id=8]
+[ext_resource path="res://music/Ramification-scr.ogg" type="AudioStream" id=8]
+[ext_resource path="res://music/Ramification-scr-Bridge_newEnemies.wav" type="AudioStream" id=9]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 14.9678
@@ -102,7 +103,12 @@ autostart = true
 
 [node name="BGMusic-normal" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 8 )
-volume_db = -15.459
+volume_db = -18.0
 autoplay = true
+bus = "Music"
+
+[node name="NewEnemyWaveAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 9 )
+volume_db = 11.02
 bus = "Music"
 [connection signal="timeout" from="EnemySpawnTimer" to="." method="_on_EnemySpawnTimer_timeout"]
