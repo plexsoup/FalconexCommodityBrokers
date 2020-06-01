@@ -14,7 +14,7 @@ var GameSpeed : float = 1.0 # 1.0 is normal
 
 enum STATES { paused, active }
 var CurrentState = STATES.active
-
+var TicksPaused = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -26,6 +26,7 @@ func getState():
 func pauseGame():
 	CurrentState = STATES.paused
 	get_tree().paused = true
+	TicksPaused = 0
 
 func resumeGame():
 	CurrentState = STATES.active
@@ -73,8 +74,15 @@ func getGameSpeed():
 	return GameSpeed
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _process(delta):
+	# listen for the unpause action
+	if CurrentState == STATES.paused:
+		TicksPaused += 1
+		print("paused at " + TicksPaused)
+		if TicksPaused > 3 and Input.is_action_just_pressed("pause"):
+			print("global sensed a keypress")
+			resumeGame()
+		
 
 
 func _on_PausePanel_resume_pressed():

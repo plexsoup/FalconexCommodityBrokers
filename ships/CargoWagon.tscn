@@ -22,4 +22,3 @@ offset = Vector2( -8.01312, 5.35336 )
 position = Vector2( 0.0431747, 0.0798864 )
 shape = SubResource( 1 )
 disabled = true
-

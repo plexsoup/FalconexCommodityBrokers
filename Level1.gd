@@ -4,6 +4,8 @@ extends Node2D
 onready var global = get_node("/root/global")
 onready var ShipContainer = get_node("galaxy/Ships")
 export var MaxEnemies = 9
+var EnemyWave : int = 0
+
 
 enum STATES {
 	frozen, playing
@@ -107,7 +109,10 @@ func spawnCashPopup(pos, amount):
 
 func spawnEnemies(num):
 	var pos = Vector2(15000, 0).rotated(randf()*2*PI) # outside boundary
-	var enemyScene = preload("res://ships/enemy.tscn")
+	var enemyScene
+	
+	if EnemyWave < 10000000: # add different enemy scenes later
+		enemyScene = preload("res://ships/enemy.tscn")
 
 	for i in range(num):
 		yield(get_tree().create_timer(.25), "timeout")
@@ -116,6 +121,9 @@ func spawnEnemies(num):
 	
 		newEnemy.start(pos)
 		pos += Vector2(randf()*300+100, randf()*300+100)
+
+	EnemyWave += 1
+	
 
 func startGame():
 	CurrentState = STATES.playing
@@ -170,9 +178,10 @@ func _on_UpgradeButtons_upgrade_pressed(typeOfUpgrade, requestingObj):
 func _on_pin_joint_requested(nodeA, nodeB): 
 	# a is ship, b is wagon
 	var newPinJoint = PinJoint2D.new()
+	var hitchLength = 100.0
 	$Joints.add_child(newPinJoint)
 	newPinJoint.set_exclude_nodes_from_collision(false)
-	newPinJoint.set_global_position(nodeA.get_global_position() - Vector2(50, 0).rotated(nodeB.get_global_rotation()))
+	newPinJoint.set_global_position(nodeA.get_global_position() - Vector2(hitchLength, 0).rotated(nodeB.get_global_rotation()))
 	# why can't the pinjoint exist at the location of the ship? Maybe it's best to put it at the hitching point.
 	newPinJoint.set_node_a(newPinJoint.get_path_to(nodeA))
 	newPinJoint.set_node_b(newPinJoint.get_path_to(nodeB))

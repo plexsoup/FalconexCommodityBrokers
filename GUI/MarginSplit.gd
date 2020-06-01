@@ -25,8 +25,8 @@ func _ready():
 
 func slidePanel():
 	TweenNode.interpolate_property(self, "split_offset",
-	        PreviousOffset, DesiredOffset, 0.33,
-	        Tween.TRANS_LINEAR, Tween.EASE_OUT)
+			PreviousOffset, DesiredOffset, 0.33,
+			Tween.TRANS_LINEAR, Tween.EASE_OUT)
 	TweenNode.start()
 	SlideNoise.play()
 

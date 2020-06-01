@@ -145,6 +145,17 @@ func releaseThrust():
 #		$Particles2D.set_emitting(false)
 	CurrentThrust = 0.0
 
+func _on_engine_upgrade_requested(level):
+	
+	ThrustFactor *= 1.5
+	MaxThrust *= 1.5
+	ThrustSizeAndVolume *= 1.5
+	# **** TODO change out the sprite or the color or something
+	if level == 1:
+		$ThrustSprite.set_self_modulate(Color.lightgreen)
+	elif level == 2:
+		$ThrustSprite.set_self_modulate(Color.aquamarine)
+
 func _on_forward_requested():
 	if SubscribedKeys.has("forward"):
 		applyThrust()

@@ -101,7 +101,7 @@ func setPlanetColor(planetType):
 		"industrial":
 			$Sprite.set_modulate(Color.maroon)
 		"mining":
-			$Sprite.set_modulate(Color.lightgray) # grey 
+			$Sprite.set_modulate(Color.whitesmoke) # grey 
 			
 func setPlanetScale(planetScale):
 	PlanetSize = planetScale

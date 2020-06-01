@@ -55,14 +55,16 @@ func _process(delta):
 	Ticks += 1
 	# try and prevent holding escape key causing show, then immediately hide
 	
-	if Paused == true and Ticks > 3 and Input.is_action_just_pressed("pause"):
+	if Paused == true and Ticks > 1000 and Input.is_action_just_pressed("pause"):
+		print("pressing escape key at " + Ticks)
 		emit_signal("resume_game")
+		Paused = false
 		hidePanel()
 		
 	# showPanel input is captured in Main.
 
 func unhidePanel():
-#	Paused = true
+	# Paused = true
 #	show()
 #	MyAnimationPlayer.play("reveal")
 #	yield(MyAnimationPlayer, "animation_finished")
@@ -85,7 +87,7 @@ func _on_QuitButton_pressed():
 
 func _on_ResumeButton_pressed():
 	emit_signal("resume_game")
-	hidePanel()
+	#hidePanel() # happens elsewhere. Probably in BottomSplitContainer
 	
 
 func _on_RichTextLabel_meta_clicked(meta):
@@ -103,8 +105,11 @@ func _on_PausePanel_visibility_changed():
 		
 func _on_main_pause_requested():
 	print("the pause message is coming from main")
+	
 	emit_signal("pause_game")
-	unhidePanel()
+
+	#Paused = true
+	#unhidePanel() # this is happening elsewhere. Probably in BottomSplitContainer
 	
 func _on_level_started():
 	initialize()

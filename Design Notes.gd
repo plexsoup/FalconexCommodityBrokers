@@ -3,12 +3,31 @@
 	
 		
 TODO:
-	Pickups just stay put, seems weird: consider giving collectibles (wheat, gems, etc.) some movement vectors..
+	fix the second storage upgrade. Either make it a static sprite, or fix the pin joint
+	
+	pause / resume is broken
+	
+	bug: when the ship loses a commodity, it will get sucked back in repeatedly, counting as multiple
+	
+	Give enemy ships a sense of purpose when the player isn't holding cargo.
+	
+	Add collisions between player and enemy ships
+	Add enemy behaviour to make them want to avoid collisions.
+	Add a possible ram upgrade, to reduce harm from collisions.
+
+	There's nothing in the News and Events panel. What's that for, anyways?
+
+	Level 1 enemies shouldn't have shields
+		Level 2 enemies get shield, then faster ships, better maneuverability, missiles, etc.
+		
+	Level 1 player shouldn't have missiles
+	Level 1 player should have smaller magnet
+	
 	Edge of Galaxy is hard and bouncy, seems weird. Consider a warning about deep space instead. maybe multiple galaxies?
-	Engine audio hurts my ears. fudge factor it down -24 db
 	Engine audio doesn't respect master volume control options.
 	Master volume control options allows player to set them way too high.
-
+	Options should have fullscreen setting (Check planetary conquest for example)
+	
 
 Notes regarding Design Decisions:
 	- What reason does the player have to not shoot?
@@ -47,10 +66,6 @@ Bugs to Fix
 	- opening and closing the sidebar selects a planet
 	- sometimes the wrong planet is selected
 	
-Bugs fixed:
-	engines are faster if the computer is faster.
-	- inputs weren't taking framerate (delta) into consideration
-
 	
 	
 Game-Feel / User Experience Enhancements to Make

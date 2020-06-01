@@ -46,6 +46,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource( 1 )
 script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="LeftSplitContainer" type="HSplitContainer" parent="."]
 anchor_right = 1.0
@@ -184,6 +187,9 @@ custom_styles/normal = ExtResource( 7 )
 toggle_mode = true
 text = "="
 script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 HoverText = "Upgrades"
 
 [node name="BottomPanel" type="Panel" parent="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer"]
@@ -212,7 +218,6 @@ custom_styles/panel = SubResource( 4 )
 stream = ExtResource( 11 )
 volume_db = -9.0
 bus = "SoundFX"
-
 [connection signal="toggled" from="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer/MainView/RightPanelButton" to="LeftSplitContainer/RightSplitContainer" method="_on_PanelButton_toggled"]
 [connection signal="toggled" from="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer/MainView/TopPanelButton" to="LeftSplitContainer/RightSplitContainer/TopSplitContainer" method="_on_PanelButton_toggled"]
 [connection signal="toggled" from="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer/MainView/BottomPanelButton" to="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer" method="_on_PanelButton_toggled"]

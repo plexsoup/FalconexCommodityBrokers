@@ -51,6 +51,7 @@ signal filled_inventory()
 signal lost_item(pos, commodityType)
 signal shopping_requested()
 signal pin_joint_requested(nodeA, nodeB)
+signal engine_upgrade_requested(level)
 
 func _ready():
 	start() # why isn't Level calling Start?
@@ -71,6 +72,7 @@ func start():
 func initializeEngines():
 	for engine in $Engines.get_children():
 		engine.start($PlayerInputController)
+		connect("engine_upgrade_requested", engine, "_on_engine_upgrade_requested")
 	
 
 func get_input():
@@ -345,19 +347,8 @@ func _on_UpgradeButtons_upgrade_pressed(upgradeType, upgradeCost, requestingObj)
 					$Weapons/DualLasers/Muzzles/Port2.show()
 					$Weapons/DualLasers/Muzzles/Starboard2.show()
 			"engines":
-				if level == 1:
-					MaxThrust = 3500
-					ThrustIncrement = 800
-					SpinThrust = 65000
-					MaxSpeed = 5500
-					$thrust.set_self_modulate(Color.lightgreen)
+				emit_signal("engine_upgrade_requested", level) # ask engines to upgrade themselves
 					
-				elif level == 2:
-					MaxThrust = 5500
-					ThrustIncrement = 1200
-					SpinThrust = 80000
-					MaxSpeed = 7500
-					$thrust.set_self_modulate(Color.aquamarine)
 			"shields":
 				if level == 1:
 					$Shield.upgradeShields(1)
@@ -379,12 +370,14 @@ func _on_UpgradeButtons_upgrade_pressed(upgradeType, upgradeCost, requestingObj)
 					$Weapons/MissileLaunchers/Muzzles/Starboard.show()
 				elif level == 2:
 					$Weapons/MissileLaunchers/ReloadTimer.set_wait_time(0.15)
+					$Weapons/MissileLaunchers/Muzzles/Center.show()
 			"magnet":
 				var shape = $Magnet/CollisionShape2D.get_shape()
+				# level 0 == 150 (set in inspector)
 				if level == 1:
-					shape.set_radius(750)
+					shape.set_radius(350)
 				elif level == 2:
-					shape.set_radius(1500)
+					shape.set_radius(800)
 			"targeting":
 				pass
 		
@@ -394,14 +387,23 @@ func _on_UpgradeButtons_upgrade_pressed(upgradeType, upgradeCost, requestingObj)
 					$Storage1.show()
 				elif level == 2:
 					MaxInventoryCount = 64
-					var newCargoWagon = load("res://ships/CargoWagon.tscn").instance()
-					add_child(newCargoWagon)
-					newCargoWagon.start(self)
-					
-					connect("pin_joint_requested", global.getCurrentLevel(), "_on_pin_joint_requested")
-					emit_signal("pin_joint_requested", self, newCargoWagon)
-					disconnect("pin_joint_requested", global.getCurrentLevel(), "_on_pin_joint_requested")
+					$Storage2.show()
 					moveEnginesOut()
+					
+
+#					It'd be cooler if there was a wagon on a hitch
+#					var newCargoWagon = load("res://ships/CargoWagon.tscn").instance()
+#					add_child(newCargoWagon)
+#					newCargoWagon.start(self)
+					
+#					Tried asking the level to create a pin joint. Didn't work well
+#					connect("pin_joint_requested", global.getCurrentLevel(), "_on_pin_joint_requested")
+#					emit_signal("pin_joint_requested", self, newCargoWagon)
+#					disconnect("pin_joint_requested", global.getCurrentLevel(), "_on_pin_joint_requested")
+#					moveEnginesOut()
+				
+
+#					Tried adding a pin joint here. Didn't work well
 #					var pinJoint = $PinJoint2D
 #					pinJoint.set_node_a(pinJoint.get_path_to(self))
 #					pinJoint.set_node_b(pinJoint.get_path_to(newCargoWagon))

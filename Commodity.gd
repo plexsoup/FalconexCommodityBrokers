@@ -3,10 +3,13 @@ extends Area2D
 # Declare member variables here. Examples:
 var Types = [ "wheat", "cog", "diamond" ]
 var MySprite
+var MyColor : Color
 var MyType
 var FollowTarget : RigidBody2D = null
 enum STATES { spawning, ready }
 var CurrentState = STATES.spawning
+var dirVector : Vector2
+
 
 
 # Called when the node enters the scene tree for the first time.
@@ -14,15 +17,22 @@ func _ready():
 	pass # Replace with function body.
 
 func start(commodityType : String, startPos, endPos):
+	dirVector = (endPos - startPos).normalized()
 	MyType = commodityType
 	match commodityType:
 		"wheat":
-			MySprite = load("res://icons/wheat.png")
+			MySprite = load("res://icons/wheat white.png")
+			MyColor = Color.green
 		"cog":
-			MySprite = load("res://icons/cog.png")
+			MySprite = load("res://icons/cog white.png")
+			MyColor =  Color.maroon
 		"diamond":
-			MySprite = load("res://icons/cut-diamond.png")
+			MySprite = load("res://icons/cut-diamond white.png")
+			MyColor =  Color.white
 	$Sprite.set_texture(MySprite)
+	$Sprite.set_self_modulate(MyColor)
+	#$WobbleTimer.set_wait_time(1.0 + randf()*2.0)
+	$WobbleTimer.start(1.0 + randf()*2.0)
 	
 	var tween = get_node("Tween")
 	tween.interpolate_property(self, "position",
@@ -34,16 +44,39 @@ func start(commodityType : String, startPos, endPos):
 	
 	# **** TODO: check for large magnet. ask the ship.
 		# fly toward ship immediately
-	var areas = get_overlapping_areas()
-	for area in areas:
-		if area.name == "Magnet":
-			FollowTarget = area.get_node("..")
+	
+		
+#	var areas = get_overlapping_areas()
+#	for area in areas:
+#		if area.name == "Magnet":
+#			var ship = area.get_node("..")
+#			if ship.has_method("isCargoHoldFull") and ship.isCargoHoldFull() == false:
+#				FollowTarget = ship
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	if FollowTarget != null:
-		set_global_position(lerp(get_global_position(), FollowTarget.get_global_position(), 0.5 ))
+func _process(delta): # getting sucked into magnet
+	if CurrentState != STATES.ready:
+		return
 
+	if FollowTarget == null:
+		var driftSpeed = 100.0
+		set_global_position(get_global_position() + (dirVector*delta * driftSpeed))
+
+		var areas = get_overlapping_areas()
+		for area in areas:
+			if area.name == "Magnet":
+				var ship = area.get_node("..")
+				if ship.has_method("isCargoHoldFull") and ship.isCargoHoldFull() == false:
+					FollowTarget = ship
+	else: # currently getting sucked into a magnet
+		var myPos = get_global_position()
+		var shipPos = FollowTarget.get_global_position() 
+
+		var minProximitySq = 64.0
+		if (shipPos - myPos).length_squared() < minProximitySq:
+			getPickedUp(FollowTarget)
+		else:
+			set_global_position(lerp(myPos, shipPos, 0.5 ))
 
 
 func getPickedUp(pickerUpper):
@@ -56,6 +89,7 @@ func getPickedUp(pickerUpper):
 				
 			else:
 				pickerUpper.pickup_commodity(self, MyType)
+				FollowTarget = null
 
 func _on_ship_picked_up_commodity():
 		$Sprite.hide()
@@ -75,9 +109,12 @@ func _on_AudioStreamPlayer2D_finished():
 func _on_Commodity_area_entered(area):
 	if CurrentState == STATES.ready:
 		if area.name == "Magnet":
-			FollowTarget = area.get_node("..")
+			var ship = area.get_node("..")
+			if ship.isCargoHoldFull() == false:
+				FollowTarget = ship
 		
 func _on_Commodity_body_entered(body):
+	# sometimes this fails to trigger. Needs a proximity check as well.
 	if CurrentState == STATES.ready:
 		var CurrentPlayer = global.getPlayerShip()
 		if body == CurrentPlayer:
@@ -91,8 +128,20 @@ func _on_DurationTimer_timeout():
 
 func _on_WobbleTimer_timeout():
 	if CurrentState == STATES.ready:
-		$AnimationPlayer.play("wobble")
-		#yield(tween, "tween_completed")
+		var tween = get_node("Tween")
+		tween.interpolate_property($Sprite, "scale",
+			Vector2(0.5,0.5), Vector2(1.5,1.5), 0.5,
+			Tween.TRANS_ELASTIC, Tween.EASE_IN)
+		tween.start()
+		yield(tween, "tween_completed")
+		tween.interpolate_property($Sprite, "scale",
+			Vector2(1.5,1.5), Vector2(0.5,0.5), 0.5,
+			Tween.TRANS_BOUNCE, Tween.EASE_OUT)
+		tween.start()
+		yield(tween, "tween_completed")	
+		
+		#$AnimationPlayer.play("wobble")
+
 		$WobbleTimer.set_wait_time(1.0 + randf()*2.0)
 		$WobbleTimer.start()
 		

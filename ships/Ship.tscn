@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://ships/ship.gd" type="Script" id=1]
 [ext_resource path="res://Camera2D.gd" type="Script" id=2]
@@ -25,12 +25,13 @@
 [ext_resource path="res://ships/RadarShipSprite.gd" type="Script" id=23]
 [ext_resource path="res://ships/Engine.tscn" type="PackedScene" id=24]
 [ext_resource path="res://pilots/PlayerInputController.tscn" type="PackedScene" id=25]
+[ext_resource path="res://ships/falcon-storage2.png" type="Texture" id=26]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 48.7196
 
 [sub_resource type="CircleShape2D" id=2]
-radius = 283.598
+radius = 150.0
 
 [sub_resource type="Animation" id=3]
 resource_name = "shields0"
@@ -246,6 +247,7 @@ visible = false
 position = Vector2( 232.53, -232.94 )
 
 [node name="Center" type="Position2D" parent="Weapons/MissileLaunchers/Muzzles"]
+visible = false
 position = Vector2( 359.86, 0.214844 )
 
 [node name="Starboard" type="Position2D" parent="Weapons/MissileLaunchers/Muzzles"]
@@ -396,6 +398,12 @@ position = Vector2( -0.647079, 0.440119 )
 scale = Vector2( 0.15, 0.15 )
 texture = ExtResource( 21 )
 
+[node name="Storage2" type="Sprite" parent="."]
+visible = false
+position = Vector2( -75, 0 )
+scale = Vector2( 0.15, 0.15 )
+texture = ExtResource( 26 )
+
 [node name="RadarShipSprite" type="Sprite" parent="."]
 visible = false
 self_modulate = Color( 1, 1, 1, 0 )
@@ -407,6 +415,7 @@ script = ExtResource( 23 )
 [node name="Tween" type="Tween" parent="RadarShipSprite"]
 
 [node name="PinJoint2D" type="PinJoint2D" parent="."]
+visible = false
 position = Vector2( -53.4674, 0 )
 node_a = NodePath("../RigidBody2D")
 node_b = NodePath("..")

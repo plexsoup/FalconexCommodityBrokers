@@ -8,7 +8,7 @@ var GalaxyLimitRadius : int = 15000
 func _ready():
 	randomize()
 	notifyGlobal()
-	spawnStars(randi()%4 + 2)
+	spawnStars(randi()%4 + 3)
 
 
 func notifyGlobal():

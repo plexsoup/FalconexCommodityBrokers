@@ -2,11 +2,11 @@
 
 [ext_resource path="res://styles/scifi_theme.tres" type="Theme" id=1]
 [ext_resource path="res://InventoryDisplayPanel.gd" type="Script" id=2]
-[ext_resource path="res://icons/wheat.png" type="Texture" id=3]
+[ext_resource path="res://icons/cog white.png" type="Texture" id=3]
 [ext_resource path="res://styles/fonts/Righteous26.tres" type="DynamicFont" id=4]
 [ext_resource path="res://InvDisplayLabel.gd" type="Script" id=5]
-[ext_resource path="res://icons/cog.png" type="Texture" id=6]
-[ext_resource path="res://icons/cut-diamond.png" type="Texture" id=7]
+[ext_resource path="res://icons/wheat white.png" type="Texture" id=6]
+[ext_resource path="res://icons/cut-diamond white.png" type="Texture" id=7]
 [ext_resource path="res://icons/crown-coin.png" type="Texture" id=8]
 
 [sub_resource type="StyleBoxEmpty" id=1]
@@ -17,20 +17,22 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_left = -175.0
-margin_top = -33.0
+margin_top = -33.6635
 margin_right = 175.0
+margin_bottom = -0.663452
 size_flags_horizontal = 4
 size_flags_vertical = 3
 theme = ExtResource( 1 )
 custom_styles/panel = SubResource( 1 )
 script = ExtResource( 2 )
 __meta__ = {
-"_edit_group_": true
+"_edit_group_": true,
+"_edit_use_anchors_": false
 }
 
 [node name="GridContainer" type="GridContainer" parent="."]
-margin_left = 33.0
-margin_right = 317.0
+margin_left = 69.0
+margin_right = 281.0
 margin_bottom = 33.0
 size_flags_horizontal = 4
 size_flags_vertical = 8
@@ -38,12 +40,13 @@ theme = ExtResource( 1 )
 columns = 8
 
 [node name="Wheat" type="TextureRect" parent="GridContainer"]
+modulate = Color( 0.00784314, 1, 0, 1 )
 margin_right = 32.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
-texture = ExtResource( 3 )
+texture = ExtResource( 6 )
 expand = true
 
 [node name="WheatLabel" type="Label" parent="GridContainer"]
@@ -59,13 +62,14 @@ text = "5"
 script = ExtResource( 5 )
 
 [node name="Cog" type="TextureRect" parent="GridContainer"]
+modulate = Color( 0.541176, 0.603922, 1, 1 )
 margin_left = 72.0
 margin_right = 104.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_horizontal = 0
 size_flags_vertical = 0
-texture = ExtResource( 6 )
+texture = ExtResource( 3 )
 expand = true
 
 [node name="CogLabel" type="Label" parent="GridContainer"]
@@ -105,6 +109,7 @@ script = ExtResource( 5 )
 CommodityType = "diamond"
 
 [node name="CashIcon" type="TextureRect" parent="GridContainer"]
+visible = false
 margin_left = 216.0
 margin_right = 248.0
 margin_bottom = 33.0
@@ -113,8 +118,9 @@ texture = ExtResource( 8 )
 expand = true
 
 [node name="CashOnHand" type="Label" parent="GridContainer"]
-margin_left = 252.0
-margin_right = 284.0
+visible = false
+margin_left = 216.0
+margin_right = 248.0
 margin_bottom = 33.0
 rect_min_size = Vector2( 32, 32 )
 size_flags_horizontal = 0
@@ -124,4 +130,3 @@ custom_fonts/font = ExtResource( 4 )
 text = "5"
 script = ExtResource( 5 )
 CommodityType = "cash"
-
