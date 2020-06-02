@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://styles/scifi_theme.tres" type="Theme" id=1]
 [ext_resource path="res://GUI/panels.gd" type="Script" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://GUI/PausePanel.tscn" type="PackedScene" id=9]
 [ext_resource path="res://GUI/PlanetList.tscn" type="PackedScene" id=10]
 [ext_resource path="res://effects/slide2.wav" type="AudioStream" id=11]
+[ext_resource path="res://GUI/DebugInfo.gd" type="Script" id=12]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.0352941, 0.0666667, 0.176471, 0.568627 )
@@ -218,6 +219,14 @@ custom_styles/panel = SubResource( 4 )
 stream = ExtResource( 11 )
 volume_db = -9.0
 bus = "SoundFX"
+
+[node name="DebugInfo" type="Label" parent="."]
+margin_left = 804.919
+margin_top = 43.7128
+margin_right = 891.919
+margin_bottom = 64.7128
+text = "Debug Info:"
+script = ExtResource( 12 )
 [connection signal="toggled" from="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer/MainView/RightPanelButton" to="LeftSplitContainer/RightSplitContainer" method="_on_PanelButton_toggled"]
 [connection signal="toggled" from="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer/MainView/TopPanelButton" to="LeftSplitContainer/RightSplitContainer/TopSplitContainer" method="_on_PanelButton_toggled"]
 [connection signal="toggled" from="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer/MainView/BottomPanelButton" to="LeftSplitContainer/RightSplitContainer/TopSplitContainer/BottomSplitContainer" method="_on_PanelButton_toggled"]

@@ -96,7 +96,7 @@ func spawnCommodity(startPos, type):
 	var newCommodity = commodityScene.instance()
 	
 	var distance = 500
-	var endPos = startPos + Vector2(randf()*distance, 0).rotated(randf()*2*PI)
+	var endPos = startPos + Vector2(rand_range(distance/3,distance), 0).rotated(randf()*2*PI)
 		
 	$Collectibles.add_child(newCommodity)
 	newCommodity.start(type, startPos, endPos)
@@ -119,8 +119,8 @@ func spawnEnemies(num):
 		var newEnemy = enemyScene.instance()
 		ShipContainer.add_child(newEnemy)
 	
-		newEnemy.start(pos)
-		pos += Vector2(randf()*300+100, randf()*300+100)
+		newEnemy.start(pos, EnemyWave)
+		pos += Vector2(rand_range(100, 400), rand_range(100, 400))
 
 	$NewEnemyWaveAudio.play()
 	EnemyWave += 1
@@ -152,7 +152,9 @@ func _on_Ship_commodity_lost(pos, type):
 
 func _on_ship_cash_popup_requested(pos, amount):
 	#print(self.name, " received signal _on_ship_cash_popup_requested ", pos, " " , amount)
-	call_deferred("spawnCashPopup", pos, amount)
+	var randDir = randf() * 2 * PI
+	var randDist = rand_range(100, 300)
+	call_deferred("spawnCashPopup", pos + Vector2(randDist,0).rotated(randDir), amount)
 
 func _on_DialogBox_completed(boxName):
 	if boxName == "intro":
@@ -164,6 +166,8 @@ func _on_EnemySpawnTimer_timeout():
 	if CurrentState == STATES.playing:
 		if getNumEnemies() < MaxEnemies:
 			spawnEnemies(3)
+	$EnemySpawnTimer.set_wait_time(rand_range(3.0, 25.0))
+	$EnemySpawnTimer.start()
 
 func _on_ship_filled_inventory():
 	var warningPanel = $CanvasLayer/WarningPanel

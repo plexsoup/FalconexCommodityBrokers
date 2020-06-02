@@ -29,5 +29,4 @@ margin_right = 40.0
 margin_bottom = 40.0
 text = "news"
 script = ExtResource( 3 )
-
 [connection signal="timeout" from="NextNewsItemTimer" to="." method="_on_NextNewsItemTimer_timeout"]

@@ -9,7 +9,7 @@ var FollowTarget : RigidBody2D = null
 enum STATES { spawning, ready }
 var CurrentState = STATES.spawning
 var dirVector : Vector2
-
+var Available : bool = true
 
 
 # Called when the node enters the scene tree for the first time.
@@ -36,7 +36,7 @@ func start(commodityType : String, startPos, endPos):
 	
 	var tween = get_node("Tween")
 	tween.interpolate_property(self, "position",
-			startPos, endPos, 0.5,
+			startPos, endPos, 0.66,
 			Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 	tween.start()
 	yield(tween, "tween_completed")
@@ -82,20 +82,22 @@ func _process(delta): # getting sucked into magnet
 func getPickedUp(pickerUpper):
 	# Note: this is calling a foreign method directly.
 			# better if it was a signal.
-	if pickerUpper.has_method("pickup_commodity"):
+	
+	if Available == true and pickerUpper.has_method("pickup_commodity"):
 		if pickerUpper.has_method("isCargoHoldFull"):
 			if pickerUpper.isCargoHoldFull():
-				FollowTarget = null
-				
-			else:
+				FollowTarget = null # no room to get picked up, just drift away
+			else: # ship has room for more cargo
 				pickerUpper.pickup_commodity(self, MyType)
+				Available = false
 				FollowTarget = null
 
 func _on_ship_picked_up_commodity():
-		$Sprite.hide()
-		$CollisionShape2D.call_deferred("set_disabled", true)
-		$AudioStreamPlayer2D.play()
-		$DestructionTimer.start()
+	# have to wait for ship to confirm it can hold you
+	$Sprite.hide()
+	$CollisionShape2D.call_deferred("set_disabled", true)
+	$AudioStreamPlayer2D.play()
+	$DestructionTimer.start()
 
 
 func _on_DestructionTimer_timeout():

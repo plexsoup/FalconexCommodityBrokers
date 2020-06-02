@@ -25,7 +25,7 @@ onready var global = get_node("/root/global")
 
 var CommodityTypes = ["wheat", "diamond", "cog"]
 var CommoditiesHeld = {"wheat":0, "diamond":0, "cog":0}
-var MaxInventoryCount = 16
+var MaxInventoryCount = 8
 
 var UpgradesDict = {"lasers":0, "engines":0, "shields":0, "missiles":0, "magnet":0, "targeting":0, "mines":0, "storage":0}
 var MaxUpgrades = {"lasers":2, "engines":2, "shields":2, "missiles":2, "magnet":2, "targeting":0, "mines":0, "storage":2}
@@ -34,6 +34,7 @@ var Cash : int = 0
 var rotation_dir = 0
 var screensize
 
+var HitscanLockout : bool = false
 var Shielded : bool = false
 var MaxShields : int = 0
 var Shields : int = 0
@@ -48,6 +49,7 @@ signal buy(shipObj)
 signal cash_popup_requested(pos, amount)
 signal picked_up_commodity()
 signal filled_inventory()
+signal emptied_inventory()
 signal lost_item(pos, commodityType)
 signal shopping_requested()
 signal pin_joint_requested(nodeA, nodeB)
@@ -64,9 +66,15 @@ func start():
 	set_contact_monitor(true)
 	set_max_contacts_reported(5)
 
-	connect("cash_popup_requested", global.getCurrentLevel(), "_on_ship_cash_popup_requested")
-
+	connectSignals()
+	
 	initializeEngines()
+
+func connectSignals():
+	connect("picked_up_commodity", $CompassRose, "_on_ship_picked_up_commodity")
+	connect("cash_popup_requested", global.getCurrentLevel(), "_on_ship_cash_popup_requested")
+	connect("lost_item", global.getCurrentLevel(), "_on_Ship_commodity_lost" )
+	connect("lost_item", $CompassRose, "_on_Ship_commodity_lost" )
 
 
 func initializeEngines():
@@ -193,6 +201,7 @@ func tradeCommodities(planetArr):
 			buyGoodsFromPlanet(planet)
 	
 func pickup_commodity(collectibleObj, commodityType):
+	
 	# Note: This is called from a foreign class:
 			# better if it was a signal
 	if getInventoryItemCount() < MaxInventoryCount:
@@ -228,6 +237,23 @@ func alertFullInventory():
 		disconnect("filled_inventory", enemy, "_on_ship_filled_inventory")
 	
 	disconnect("filled_inventory", currentLevel , "_on_ship_filled_inventory")
+
+func alertEmptyInventory():
+	# tell the all enemies and the main level
+	var currentLevel = global.getCurrentLevel()
+	#connect("emptied_inventory", currentLevel , "_on_ship_emptied_inventory")
+
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if is_instance_valid(enemy) and enemy.has_method("_on_ship_emptied_inventory"):
+			connect("emptied_inventory", enemy, "_on_ship_emptied_inventory")
+
+	emit_signal("emptied_inventory")
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if is_instance_valid(enemy) and enemy.has_method("_on_ship_emptied_inventory"):
+			disconnect("emptied_inventory", enemy, "_on_ship_emptied_inventory")
+	
+	#disconnect("emptied_inventory", currentLevel , "_on_ship_emptied_inventory")
+
 
 	
 func getInventory():
@@ -288,6 +314,12 @@ func _on_PlanetList_selected_object(object):
 	CompassTarget = object
 	
 func _on_planet_purchase_accepted(commodityName, quantity, cashGiven):
+	# this probably gets called 3 times per planet.
+	# originally I had inteded that each planet would only buy 1 resource type
+	# but it was more fun if the player sold their entire cargo hold at once
+
+	$CompassRose.clearCargo()
+	
 	#print(self.name , " planet accepted our sale: ", commodityName, ", ", " quantity ", quantity, " , cashGiven ", cashGiven )
 	Cash += cashGiven
 	CommoditiesHeld[commodityName] -= quantity
@@ -300,34 +332,41 @@ func _input(event):
 		Cash += 1000
 
 func loseItem():
+	# **** TODO: add some kind of pickup delay, so you can't just insantly suck in items you lose?
 	var itemsInHold = []
 	for key in CommoditiesHeld:
 		if CommoditiesHeld[key] > 0:
 			itemsInHold.push_back(key)
 	if itemsInHold.size() > 0:
 		var commodityType = itemsInHold[randi()%itemsInHold.size()]
-		connect("lost_item", global.getCurrentLevel(), "_on_Ship_commodity_lost" )
 		emit_signal("lost_item", get_global_position(), commodityType)
-		disconnect("lost_item", global.getCurrentLevel(), "_on_Ship_commodity_lost" )
 		CommoditiesHeld[commodityType] -= 1
 	else:
-		if Cash > 100:
-			Cash -= 100
+		# removing the cash penalty for now.. its not fun (yet)
+		# if Cash > 100:
+		#	Cash -= 100
+		alertEmptyInventory()
 	
 	
 func _on_hit(amount):
-	
-	if Shielded == false or Shields <= 0:
-		$CrashNoise.play()
-		# give up commodities first, then cash
-		loseItem()
-		$Shield.hide()
-	else:
+	if HitscanLockout == true:
+		return
+	elif Shielded == true and Shields > 0:
 		# **** TODO: Move this logic into Shields object
 		if $Shield/AnimationPlayer.is_playing() == false:
 			$Shield/AnimationPlayer.play(ShieldAnimation)
 			Shields -= 100
 			$Shield/ShieldRechargeTimer.start()
+			
+	else:
+		$CrashNoise.play()
+		# give up commodities first, then cash
+		loseItem()
+		$Shield.hide()
+		HitscanLockout = true
+		$Shield/HitscanTimer.start()
+
+
 		
 func getMaxUpgrade(upgradeType):
 	return MaxUpgrades[upgradeType]
@@ -350,13 +389,12 @@ func _on_UpgradeButtons_upgrade_pressed(upgradeType, upgradeCost, requestingObj)
 				emit_signal("engine_upgrade_requested", level) # ask engines to upgrade themselves
 					
 			"shields":
+				$Shield.upgradeShields(level)
 				if level == 1:
-					$Shield.upgradeShields(1)
 					Shielded = true
 					MaxShields = 500
 					ShieldAnimation = "shields1"
 				elif level == 2:
-					$Shield.upgradeShields(2)
 					MaxShields = 1000
 					ShieldAnimation = "shields2"
 					
@@ -432,3 +470,8 @@ func _on_ShieldRechargeTimer_timeout():
 	$Shield/ShieldRechargeTimer.start()
 		
 
+
+
+func _on_HitscanTimer_timeout():
+	HitscanLockout = false
+	

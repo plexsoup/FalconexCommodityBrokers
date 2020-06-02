@@ -23,7 +23,7 @@ var CommodityTypes = ["wheat", "diamond", "cog"]
 var PlanetType : String
 var MyCommodityType : String = ""
 export var MaxCommoditiesHeld : int = 8
-var CommodityInventory: int = 0
+var CommodityInventory: int = MaxCommoditiesHeld / 2
 var ClosedForBusiness : bool = false
 var PlanetSize : float
 
@@ -63,6 +63,9 @@ func start(starToOrbit, planetType, direction, dist, planetScale):
 	setPlanetScale(planetScale)
 	setPlanetColor(planetType)
 	setPrices(planetType)
+
+func isPlanet():
+	return true
 
 func getColumTextForListing():
 	var columnText = [

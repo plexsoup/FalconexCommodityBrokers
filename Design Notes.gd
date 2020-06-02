@@ -3,12 +3,26 @@
 	
 		
 TODO:
-	fix the second storage upgrade. Either make it a static sprite, or fix the pin joint
+	- turn down the hitscan timer a bit?
+	
+	- bug: gain multiple compass roses for every pickup
+	
+	
+	- add juice to planet impact
+	
+	- enemies need to break off the attack after player lost all cargo.
+	- enemies should try and scoop up cargo sometimes
 	
 	pause / resume is broken
 	
-	bug: when the ship loses a commodity, it will get sucked back in repeatedly, counting as multiple
+	enemies need progression.. easy at low level, hard later on
 	
+	bug: commodities pickup
+		sometimes a gem will get stuck on top of the player ship 
+		when the ship loses a commodity, it will get sucked back in repeatedly, counting as multiple
+	bug:
+		in the exported game, background stars didn't show up once
+		
 	Give enemy ships a sense of purpose when the player isn't holding cargo.
 	
 	Add collisions between player and enemy ships

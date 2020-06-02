@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://ships/enemy.gd" type="Script" id=1]
 [ext_resource path="res://ships/razor2.png" type="Texture" id=2]
@@ -9,12 +9,28 @@
 [ext_resource path="res://effects/shields.wav" type="AudioStream" id=7]
 [ext_resource path="res://effects/fireSpritesheet.png" type="Texture" id=8]
 [ext_resource path="res://effects/crash.ogg" type="AudioStream" id=9]
+[ext_resource path="res://ships/ActionLabel.gd" type="Script" id=10]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 92.5764
 
-[sub_resource type="Animation" id=2]
-resource_name = "explosion"
+[sub_resource type="ParticlesMaterial" id=2]
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 200.0
+initial_velocity_random = 0.63
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle = 45.0
+angle_random = 0.2
+scale = 52.85
+scale_random = 0.6
+color = Color( 0.305882, 0.623529, 0.698039, 1 )
+hue_variation = 0.07
+hue_variation_random = 1.0
+
+[sub_resource type="Animation" id=3]
 length = 0.75
 step = 0.05
 tracks/0/type = "value"
@@ -54,8 +70,7 @@ tracks/2/keys = {
 "values": [ false, true ]
 }
 
-[sub_resource type="Animation" id=3]
-resource_name = "shield"
+[sub_resource type="Animation" id=4]
 length = 0.4
 step = 0.05
 tracks/0/type = "value"
@@ -106,6 +121,13 @@ tracks/3/keys = {
 "update": 0,
 "values": [ Vector2( 0.25, 0.25 ), Vector2( 0.242, 0.314 ), Vector2( 0.43, 0.27 ), Vector2( 0.25, 0.25 ) ]
 }
+
+[sub_resource type="DynamicFontData" id=5]
+font_path = "res://styles/fonts/Fredoka_One/FredokaOne-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=6]
+size = 32
+font_data = SubResource( 5 )
 
 [node name="enemy" type="Area2D" groups=[
 "enemies",
@@ -166,6 +188,15 @@ bus = "SoundFX"
 wait_time = 0.4
 one_shot = true
 
+[node name="DamageFX" type="Node2D" parent="."]
+
+[node name="Particles2D" type="Particles2D" parent="DamageFX"]
+emitting = false
+amount = 3
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource( 2 )
+
 [node name="Explosion" type="Sprite" parent="."]
 texture = ExtResource( 8 )
 vframes = 4
@@ -181,9 +212,29 @@ bus = "SoundFX"
 one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/explosion = SubResource( 2 )
-anims/shield = SubResource( 3 )
+anims/explosion = SubResource( 3 )
+anims/shield = SubResource( 4 )
 
+[node name="BehaviourTimer" type="Timer" parent="."]
+wait_time = 3.0
+autostart = true
+
+[node name="ActionLabel" type="Label" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -42.8145
+margin_top = -134.04
+margin_right = 43.1855
+margin_bottom = -120.04
+rect_pivot_offset = Vector2( 42.6409, 134.401 )
+custom_fonts/font = SubResource( 6 )
+text = "Action"
+align = 1
+script = ExtResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 [connection signal="timeout" from="weapons/Dual Lasers/ShootCycleTimer" to="weapons/Dual Lasers" method="_on_ShootCycleTimer_timeout"]
 [connection signal="timeout" from="Shield/ShieldTimer" to="." method="_on_ShieldTimer_timeout"]
 [connection signal="timeout" from="Explosion/DestructionTimer" to="." method="_on_DestructionTimer_timeout"]
+[connection signal="timeout" from="BehaviourTimer" to="." method="_on_BehaviourTimer_timeout"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=33 format=2]
 
 [ext_resource path="res://ships/ship.gd" type="Script" id=1]
 [ext_resource path="res://Camera2D.gd" type="Script" id=2]
@@ -26,6 +26,7 @@
 [ext_resource path="res://ships/Engine.tscn" type="PackedScene" id=24]
 [ext_resource path="res://pilots/PlayerInputController.tscn" type="PackedScene" id=25]
 [ext_resource path="res://ships/falcon-storage2.png" type="Texture" id=26]
+[ext_resource path="res://ships/CompassRose.gd" type="Script" id=27]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 48.7196
@@ -350,6 +351,10 @@ stream = ExtResource( 19 )
 volume_db = -18.0
 bus = "SoundFX"
 
+[node name="HitscanTimer" type="Timer" parent="Shield"]
+wait_time = 0.66
+one_shot = true
+
 [node name="ShieldTimer" type="Timer" parent="Shield"]
 wait_time = 0.4
 one_shot = true
@@ -449,7 +454,17 @@ SubscribedKeyTwo = "reverse"
 ThrustSizeAndVolume = 0.25
 
 [node name="PlayerInputController" parent="." instance=ExtResource( 25 )]
+
+[node name="CompassRose" type="Node2D" parent="."]
+script = ExtResource( 27 )
+
+[node name="cargo" type="Node2D" parent="CompassRose"]
+
+[node name="planets" type="Node2D" parent="CompassRose"]
+
+[node name="enemies" type="Node2D" parent="CompassRose"]
 [connection signal="timeout" from="Weapons/MissileLaunchers/ReloadTimer" to="Weapons/MissileLaunchers" method="_on_ReloadTimer_timeout"]
 [connection signal="finished" from="InventoryFullNoise" to="." method="_on_InventoryFullNoise_finished"]
+[connection signal="timeout" from="Shield/HitscanTimer" to="." method="_on_HitscanTimer_timeout"]
 [connection signal="timeout" from="Shield/ShieldTimer" to="Shield" method="_on_ShieldTimer_timeout"]
 [connection signal="timeout" from="Shield/ShieldRechargeTimer" to="." method="_on_ShieldRechargeTimer_timeout"]
