@@ -42,7 +42,7 @@ func _process(delta):
 		emit_signal("right_pressed")
 	if Input.is_action_just_pressed("applyThrust"):
 		emit_signal("up_pressed")
-	if Input.is_action_just_pressed("Brake"):
+	if Input.is_action_just_pressed("brake"):
 		emit_signal("down_pressed")
 
 	if Input.is_action_just_released("turnLeft"):
@@ -51,7 +51,7 @@ func _process(delta):
 		emit_signal("right_released")
 	if Input.is_action_just_released("applyThrust"):
 		emit_signal("up_released")
-	if Input.is_action_just_released("Brake"):
+	if Input.is_action_just_released("brake"):
 		emit_signal("down_released")
 		
 		

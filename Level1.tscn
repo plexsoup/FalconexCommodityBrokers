@@ -7,8 +7,8 @@
 [ext_resource path="res://WarningPanel.gd" type="Script" id=5]
 [ext_resource path="res://styles/fonts/Righteous26.tres" type="DynamicFont" id=6]
 [ext_resource path="res://GravWell.gd" type="Script" id=7]
-[ext_resource path="res://music/Ramification-scr.ogg" type="AudioStream" id=8]
-[ext_resource path="res://music/Ramification-scr-Bridge_newEnemies.wav" type="AudioStream" id=9]
+[ext_resource path="res://effects/BeepBoop.ogg" type="AudioStream" id=8]
+[ext_resource path="res://effects/sizzle.wav" type="AudioStream" id=9]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 14.9678
@@ -84,11 +84,11 @@ align = 1
 [node name="Joints" type="Node2D" parent="."]
 
 [node name="GravWell" type="Area2D" parent="."]
+priority = 20.0
 space_override = 3
 gravity_point = true
 gravity_vec = Vector2( 0, 0 )
 angular_damp = 0.1
-priority = 20.0
 script = ExtResource( 7 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GravWell"]
@@ -111,4 +111,5 @@ bus = "Music"
 stream = ExtResource( 9 )
 volume_db = 11.02
 bus = "Music"
+
 [connection signal="timeout" from="EnemySpawnTimer" to="." method="_on_EnemySpawnTimer_timeout"]
